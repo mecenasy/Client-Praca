@@ -4,7 +4,8 @@
    "description": "Praca Dyplomowa",
    "main": "index.tsx",
    "scripts": {
-      "postinstall": "npm run client && npm run server",
+      "postinstall": "npm run client && npm run server && npm run assets",
+      "assets": "ts-node utils/assets",
       "start:dev": "webpack serve --config webpack/webpack.dev.config.ts",
       "client": "webpack --config webpack/webpack.prod.config.ts",
       "client:watch": "webpack --config webpack/webpack.prod.config.ts --watch",
