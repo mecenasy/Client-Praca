@@ -36,6 +36,9 @@ const config = {
          DEV: JSON.stringify(process.env.NODE_ENV !== 'production'),
          VARIABLES: JSON.stringify(process.env.VARIABLES),
          SERVER_BUILD: JSON.stringify(false),
+         API_HOST_URL: JSON.stringify(process.env.API_HOST_URL),
+         API_HOST_PORT: JSON.stringify(process.env.API_HOST_PORT),
+         API_HOST_PROTOCOL: JSON.stringify(process.env.API_HOST_PROTOCOL),
       }),
    ],
 };

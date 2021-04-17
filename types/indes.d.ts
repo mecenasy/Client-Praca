@@ -20,9 +20,15 @@ declare namespace NodeJS {
       VARIABLES: string;
       NODE_ENV: 'development' | 'production';
       PORT: number;
+      API_HOST_URL: string;
+      API_HOST_PORT: string;
+      API_HOST_PROTOCOL: string
    }
 }
 
 declare const VARIABLES: string;
 declare const SERVER_BUILD: boolean;
 declare const DEV: boolean;
+declare const API_HOST_URL: string;
+declare const API_HOST_PORT: string;
+declare const API_HOST_PROTOCOL: string
