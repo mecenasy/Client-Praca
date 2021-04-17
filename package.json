@@ -4,11 +4,10 @@
    "description": "Praca Dyplomowa",
    "main": "index.tsx",
    "scripts": {
-      "postinstall": "npm run build && npm run server",
-      "start": "webpack serve --config webpack/webpack.dev.config.ts",
-      "start:watch": "webpack serve --config webpack/webpack.dev.config.ts --watch",
-      "build": "webpack --config webpack/webpack.prod.config.ts",
-      "build:watch": "webpack --config webpack/webpack.prod.config.ts --watch",
+      "postinstall": "npm run client && npm run server",
+      "start:dev": "webpack serve --config webpack/webpack.dev.config.ts",
+      "client": "webpack --config webpack/webpack.prod.config.ts",
+      "client:watch": "webpack --config webpack/webpack.prod.config.ts --watch",
       "server": "webpack --config webpack/webpack.server.config.ts",
       "server:watch": "webpack --config webpack/webpack.server.config.ts --watch",
       "server:run": "nodemon ./build/bundle"
