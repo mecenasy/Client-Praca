@@ -16,7 +16,8 @@ export const generateHtml = (
          <head>
             ${metaTags.title.toString()}
             ${metaTags.meta.toString()}
-            <link rel="shortcut icon" type="image/x-icon" href="/build/favicon.ico" />
+            <link rel="shortcut icon" type="image/x-icon" href="/build/assets/favicon.ico" />
+            <link rel="manifest" href="/build/assets/manifest.json" />
             ${metaTags.link.toString()}
             ${metaTags.script.toString()}
             ${generateScripts(bundlesScripts)}
