@@ -1,12 +1,12 @@
 export enum Direction {
-   Informatics = 'informatics',
-   Management = 'management',
+   Informatics = 'Informatyka',
+   Management = 'Zarządzanie',
    None = '',
 }
 
 export enum Specialty {
-   Programming = 'programming',
-   Networks = 'networks',
+   Programming = 'Programowanie',
+   Networks = 'Sieci',
    None = '',
 }
 

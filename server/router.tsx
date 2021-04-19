@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import React from 'react';
 import ReactDomServer from 'react-dom/server';
 import { Helmet } from 'react-helmet';
@@ -25,7 +25,12 @@ const router = express.Router();
 const DEV = process.env.NODE_ENV !== 'production';
 const stats: LoadableManifest = getManifest();
 
-router.use(async (req: Request, res: Response) => {
+router.use(async (req: Request, res: Response, next: NextFunction) => {
+   if(res.req?.originalUrl.startsWith('/build')) {
+      next();
+      return
+   }
+
    const context: StaticRouterContext = {}
    const modules: string[] = [];
    const sheet = new ServerStyleSheet();

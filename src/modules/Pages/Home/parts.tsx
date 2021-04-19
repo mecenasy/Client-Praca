@@ -38,6 +38,7 @@ export const Box = styled(BoxBase) `
 export const BoxUser = styled(BoxBase) `
    width: 100%;
    height: 200px;
+   justify-content: space-evenly;
    background-color: #c9e4ff;
 
    &:hover {

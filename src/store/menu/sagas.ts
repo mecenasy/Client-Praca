@@ -9,10 +9,9 @@ export function* getMenuWatcher() {
 export function* getMenuWorker() {
    try {
       const { data } = yield call(getMenu);
-
+      
       yield put(getMenuSuccess(data))
    } catch (error) {
       yield put(getMenuFail(error))
-
    }
 }
