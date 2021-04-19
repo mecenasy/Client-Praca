@@ -4,9 +4,11 @@ import { History } from "history";
 import { AnyAction, Reducer, Store } from "redux";
 import { CounterState } from "../counter/constants";
 import { MenuState } from "../menu/constants";
+import { Person } from "../person/constants";
 
 export interface ApplicationState {
    counter: CounterState;
+   person: Person;
    router: RouterState;
    menu: MenuState;
 }
