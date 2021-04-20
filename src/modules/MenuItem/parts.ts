@@ -1,6 +1,7 @@
 import styled, { css, } from 'styled-components';
 import BoxBase from '../Components/Box/Box';
 import { Link as LinkBase } from "react-router-dom";
+import { media } from '../../styles/media';
 
 interface LinkProps {
    isSmall: boolean;
@@ -39,11 +40,16 @@ export const Link = styled(LinkBase).withConfig({
 `;
 
 export const Box = styled(BoxBase)`
-   width: 200px;
-   height: 200px;
+   width: 130px;
+   height: 130px;
    background-color: #c9e4ff;
    flex-direction: column;
 
+   ${media.greaterThan('xxs')`
+      width: 180px;
+      height: 180px;
+   `} 
+   
    &:hover {
       background-color: #aed3f8;
    }

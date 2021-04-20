@@ -1,10 +1,15 @@
 import React, { FC } from 'react';
 import * as P from './parts';
 
-const PageWrapper: FC = ({
-   children
+interface PageWrapperProps {
+   pickUp?: boolean;
+}
+
+const PageWrapper: FC<PageWrapperProps> = ({
+   children,
+   pickUp = false,
 }) => (
-   <P.Wrapper>
+   <P.Wrapper pickUp={pickUp}>
       <P.InnerWrapper>
          {children}
       </P.InnerWrapper>

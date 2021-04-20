@@ -14,8 +14,9 @@ export const generateHtml = (
       <!DOCTYPE html>
       <html ${metaTags.htmlAttributes.toString()}>
          <head>
-            ${metaTags.title.toString()}
+            <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1 user-scalable=no">
+            ${metaTags.title.toString()}
             ${metaTags.meta.toString()}
             <link rel="shortcut icon" type="image/x-icon" href="/build/assets/favicon.ico" />
             <link rel="manifest" href="/build/assets/manifest.json" />

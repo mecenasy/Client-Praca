@@ -1,21 +1,52 @@
 import styled from 'styled-components';
 import BoxBase from '../../Components/Box/Box';
-import { Link as LinkBase } from "react-router-dom";
+import { media } from '../../../styles/media';
+import PhotoBase from "../../Photo/Photo";
 
-export const Link = styled(LinkBase)`
-   text-decoration: none;
-   color: black;
+export const Col = styled.div`
+   width: ${1 / 2 * 100}%;
+   justify-content: center;
+   display: flex;
+   flex-wrap: wrap;
 
-   &:active, :visited, :hover {
-      color: black;
+   &:nth-child(2n+0) {
+       padding-right: 10px;
+   }
+
+   &:nth-child(2n+1) {
+      padding-left: 10px;
+   }
+
+   ${media.greaterThan('xxs')`
+      &:nth-child(2n+0) {
+         padding-right: 50px;
+      }
+
+      &:nth-child(2n+1) {
+         padding-left: 50px;
+      }
+   `}
+`;
+
+export const BoxUser = styled(BoxBase)`
+   width: 100%;
+   height: 120px;
+   justify-content: flex-start;
+   background-color: #c9e4ff;
+
+   ${media.greaterThan('xs')`
+      height: 200px;
+   `}
+
+   &:hover {
+      background-color: #aed3f8;
    }
 `;
 
-export const EmptyBox = styled(BoxBase)`
-   width: 200px;
-   height: 200px;
-   visibility: hidden;
+export const Photo = styled(PhotoBase)`
+  
 `;
+
 export const Wrapper = styled.div`
    display: flex;
    justify-content: space-between;
@@ -24,42 +55,16 @@ export const Wrapper = styled.div`
    margin: auto;
 `;
 
-export const Box = styled(BoxBase) `
-   width: 200px;
-   height: 200px;
-   background-color: #c9e4ff;
-   flex-direction: column;
-
-   &:hover {
-      background-color: #aed3f8;
-   }
-`;
-
-export const BoxUser = styled(BoxBase) `
-   width: 100%;
-   height: 200px;
-   justify-content: space-evenly;
-   background-color: #c9e4ff;
-
-   &:hover {
-      background-color: #aed3f8;
-   }
-`;
-
-export const Image =styled.img`
-   width: 70px;
-   height: 70px;
-   margin-bottom: 20px;
-`;
-
-export const InnerWrapper = styled.div`
+export const Row = styled.div`
    display: flex;
-   justify-content: center;
    flex-wrap: wrap;
-   padding-top: 50px;
    width: 100%;
 
-   &:last-child {
-      padding: 0;
-   }
+   ${media.greaterThan('xs')`
+      padding-top: 50px;
+     
+      &:last-child {
+         padding: 0;
+      }
+   `}
 `;

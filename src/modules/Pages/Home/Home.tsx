@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { getMenuSelector } from "../../../store/menu/selectors";
 import MenuItem from "../../MenuItem/MenuItem";
 import { getPerson } from "../../../store/person/selectors";
-import Photo from "../../Photo/Photo";
 import PersonDataRow from "../../PersonDataRow/PersonDataRow";
 
 export const Home: FC = () => {
@@ -14,15 +13,15 @@ export const Home: FC = () => {
    const person = useSelector(getPerson);
 
    return (
-      <PageWrapper >
+      <PageWrapper pickUp >
          <Helmet>
             <title>System zarządzania uczelnianego</title>
             <meta name="description" content={'to jest system zarządzania uczelnianego'} />
          </Helmet>
          <P.Wrapper >
-            <P.InnerWrapper >
+            <P.Row >
                <P.BoxUser >
-                  <Photo src={person.photo || ''} />
+                  <P.Photo src={person.photo || ''} />
                   <div>
                      <PersonDataRow title={'Imie Nazwisko'} data={`${person.name} ${person.surname}`} />
                      <PersonDataRow title={'Wydział'} data={person.direction} />
@@ -33,24 +32,23 @@ export const Home: FC = () => {
                      <PersonDataRow title={'Grupa'} data={person.group} />
                   </div>
                </P.BoxUser>
-            </P.InnerWrapper>
-            <P.InnerWrapper  >
-               {leftSide.map((item) => (
-                  <MenuItem
-                     key={item.link}
-                     {...item}
-                  />
+            </P.Row>
+            <P.Row  >
+               {leftSide.filter(({ hidden }) => !hidden).map((item) => (
+                  <P.Col key={item.link}>
+                     <MenuItem {...item} />
+                  </P.Col>
                ))}
-               {leftSide.length % 2 === 1 && <P.EmptyBox />}
-            </P.InnerWrapper>
-            <P.InnerWrapper >
+            </P.Row>
+            <P.Row >
                {rightSide.map((item) => (
-                  <MenuItem
-                     key={item.link}
-                     {...item}
-                  />
+                  <P.Col key={item.link}>
+                     <MenuItem
+                        {...item}
+                     />
+                  </P.Col>
                ))}
-            </P.InnerWrapper>
+            </P.Row>
          </P.Wrapper>
       </PageWrapper >
    )
