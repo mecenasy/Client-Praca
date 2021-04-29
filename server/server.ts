@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { preloadAll } from '@react-loadable/revised';
-
+import useragent from 'express-useragent';
 import { router } from './router';
 
 const app = express();
@@ -14,6 +14,7 @@ app.use(
    ));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(useragent.express());
 
 app.use('/', router);
 

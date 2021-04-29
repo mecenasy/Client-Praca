@@ -26,7 +26,7 @@ const DEV = process.env.NODE_ENV !== 'production';
 const stats: LoadableManifest = getManifest();
 
 router.use(async (req: Request, res: Response, next: NextFunction) => {
-   if(res.req?.originalUrl.startsWith('/build')) {
+   if (res.req?.originalUrl.startsWith('/build')) {
       next();
       return
    }
@@ -54,7 +54,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
 
    if (actions.length) {
       actions.forEach((action) => {
-         if(DEV) {
+         if (DEV) {
             console.log('[server]', action.type)
          }
          store.dispatch(action);
@@ -74,10 +74,21 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
       }
    }
 
+   const {
+      isMobile,
+      isTablet,
+      isDesktop,
+   } = req.useragent || {};
+
    //final render
    const app = (
       <Capture report={getModules(modules)} >
          <AppProvider
+            defaultResponsive={{
+               isMobile,
+               isTablet,
+               isDesktop,
+            }}
             store={store}
             url={req.url}
             history={history}

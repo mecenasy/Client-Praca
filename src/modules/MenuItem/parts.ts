@@ -11,8 +11,17 @@ interface LinkProps {
 export const Link = styled(LinkBase).withConfig({
    shouldForwardProp: (prop, defaultValidatorFn) => !['isSmall', 'isHidden'].includes(prop) && defaultValidatorFn(prop),
 }) <LinkProps>`
+   background: none;
+   border: none;
    text-decoration: none;
+   padding: 0;
    color: black;
+   font-size: 14px;
+   outline: none;
+
+   ${media.greaterThan('xs')`
+      font-size: 16px;
+   `}
 
    &:active, :visited, :hover {
       color: black;
@@ -45,7 +54,7 @@ export const Box = styled(BoxBase)`
    background-color: #c9e4ff;
    flex-direction: column;
 
-   ${media.greaterThan('xxs')`
+   ${media.greaterThan('xs')`
       width: 180px;
       height: 180px;
    `} 
@@ -58,7 +67,10 @@ export const Box = styled(BoxBase)`
 export const Image = styled.img`
    width: 70px;
    height: 70px;
-   margin-bottom: 20px;
+
+   ${media.greaterThan('xs')`
+      margin-bottom: 20px;
+   `} 
 `;
 
 export const Text = styled.div``;

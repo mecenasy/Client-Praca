@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { Helmet } from "react-helmet";
 import * as P from './parts';
 import PageWrapper from "../../Components/Contaners/PageWrapper/PageWrapper";
@@ -11,12 +11,11 @@ import PersonDataRow from "../../PersonDataRow/PersonDataRow";
 export const Home: FC = () => {
    const { leftSide, rightSide } = useSelector(getMenuSelector);
    const person = useSelector(getPerson);
-
    return (
       <PageWrapper pickUp >
          <Helmet>
             <title>System zarządzania uczelnianego</title>
-            <meta name="description" content={'to jest system zarządzania uczelnianego'} />
+            <meta name="description" content={'to jest system zzarządzania uczelnianego'} />
          </Helmet>
          <P.Wrapper >
             <P.Row >
@@ -43,9 +42,7 @@ export const Home: FC = () => {
             <P.Row >
                {rightSide.map((item) => (
                   <P.Col key={item.link}>
-                     <MenuItem
-                        {...item}
-                     />
+                     <MenuItem {...item} />
                   </P.Col>
                ))}
             </P.Row>

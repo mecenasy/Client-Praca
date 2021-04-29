@@ -10,7 +10,7 @@ export const Col = styled.div`
    flex-wrap: wrap;
 
    &:nth-child(2n+0) {
-       padding-right: 10px;
+      padding-right: 10px;
    }
 
    &:nth-child(2n+1) {
@@ -18,11 +18,19 @@ export const Col = styled.div`
    }
 
    ${media.greaterThan('xxs')`
+      width: ${1 / 3 * 100}%;
       &:nth-child(2n+0) {
+      padding-right: 0;
+   }
+
+   &:nth-child(2n+1) {
+      padding-left: 0;
+   }
+      &:nth-child(3n+0) {
          padding-right: 50px;
       }
 
-      &:nth-child(2n+1) {
+      &:nth-child(3n+1) {
          padding-left: 50px;
       }
    `}

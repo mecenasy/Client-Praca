@@ -1,9 +1,7 @@
 import styled, { css } from 'styled-components';
-import BoxBase from '../Components/Box/Box';
 import { Link as LinkBase } from "react-router-dom";
 
 export const Link = styled(LinkBase)`
-   margin: 8px;
    text-decoration: none;
    color: black;
 
@@ -13,11 +11,14 @@ export const Link = styled(LinkBase)`
 `;
 
 export const Image = styled.img`
+   margin: 0 16px;
    width: 20px;
    height: 20px;
 `;
 
 export const Wrapper = styled.div<{ show: boolean }>`
+   position:static;
+   top: 0;
    display: flex;
    justify-content: space-between;
    width: 100%;
@@ -26,23 +27,13 @@ export const Wrapper = styled.div<{ show: boolean }>`
    opacity: 0;
    transform: translateY(-100%);
    transition: all 300ms ease-in-out;
+   position: relative;
+   z-index: 2;
 
    ${({ show }) => show && css`
       opacity: 1;
       transform: translateY(0);
    `}
-`;
-
-export const Box = styled(BoxBase)`
-   width: 36px;
-   height: 36px;
-   font-size: 10px;
-   margin: 0;
-   background-color: #c9e4ff;
-
-   &:hover {
-      background-color: #aed3f8;
-   }
 `;
 
 export const MenuWrapper = styled.div`
@@ -57,6 +48,31 @@ export const UserWrapper = styled.div`
    width: 100%;
 `;
 
-export const Counter = styled.div`
-   transform: rotate(-45deg);
+export const MenuBurgerOverlay = styled.div`
+   position: absolute;
+   top:0;
+   bottom:0;
+   left:0;
+   right:0;
+   background-color: white;
+   opacity: 0.3;
 `;
+
+export const MenuBurgerItem = styled.div`
+   height: 56px;
+   border-bottom: 1px solid grey;
+   width: 100%;
+   display: flex;
+   align-items: center;
+
+   &:active, :visited, :hover {
+      background-color: #f1efef;
+   }
+`;
+
+export const MenuBurgerInnerWrapper = styled.div`
+   width: 300px;
+   background: white;
+`;
+
+export const Text = styled.span``;
