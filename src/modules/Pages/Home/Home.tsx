@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 import { Helmet } from "react-helmet";
 import * as P from './parts';
 import PageWrapper from "../../Components/Contaners/PageWrapper/PageWrapper";
