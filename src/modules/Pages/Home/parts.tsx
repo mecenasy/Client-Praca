@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import BoxBase from '../../Components/Box/Box';
-import { media } from '../../../styles/media';
+import { media } from '~/src/styles/media';
 import PhotoBase from "../../Photo/Photo";
 
 export const Col = styled.div`

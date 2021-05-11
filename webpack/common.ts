@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import path from 'path';
 dotenv.config();
 
 const DEV = process.env.NODE_ENV !== 'production';
@@ -51,6 +52,9 @@ export const commonConfig = {
    },
    resolve: {
       extensions: [".tsx", ".ts", '.js'],
+      alias: {
+         '~': path.resolve(__dirname, '../'),
+      },
    },
    devtool: DEV ? 'inline-source-map' : false,
 };

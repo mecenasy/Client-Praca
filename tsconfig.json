@@ -7,6 +7,12 @@
          "dom.iterable",
          "esnext"
       ],
+      "baseUrl": "./",
+      "paths": {
+         "~/*": [
+            "./*"
+         ]
+      },
       "allowSyntheticDefaultImports": true,
       "skipLibCheck": true,
       "esModuleInterop": true,
@@ -17,6 +23,7 @@
       "isolatedModules": true,
       "noEmit": true,
       "jsx": "react",
+      "rootDir": "./",
    },
    "include": [
       "./",
