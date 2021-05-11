@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useState, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useState, useRef, useLayoutEffect } from 'react';
 import { createPortal } from "react-dom";
 import { useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
-import getOrCreateReactPortalsDiv from '../../../../utils/portalContainer';
-import { getMenuSelector } from '../../../store/menu/selectors';
+import getOrCreateReactPortalsDiv from '~/utils/portalContainer';
+import { getMenuSelector } from '~/src/store/menu/selectors';
 import * as P from './parts';
 
 
@@ -19,32 +19,26 @@ export const BurgerMenu: FC<BurgerMenuProps> = ({
    const parent = getOrCreateReactPortalsDiv();
 
    const { leftSide } = useSelector(getMenuSelector);
-   const [opening, setOpening] = useState(false);
-   const renderedRef = useRef(0);
+   const [opening, setOpening] = useState(true);
+   const renderedRef = useRef(false);
 
    const onRest = useCallback(() => {
-      if (renderedRef.current > 1) {
-         onCloseMenu()
+      if (renderedRef.current) {
+         onCloseMenu();
       } else {
-         renderedRef.current = ++renderedRef.current
+         renderedRef.current = true;
       }
    }, [onCloseMenu]);
 
    const props = useSpring({
-      config: {
-         duration: 200
-      },
+      config: { duration: 200 },
       onRest,
       from: { width: "0px" },
       to: { width: opening ? "300px" : "0px" }
    });
 
-   useEffect(() => {
-      if (renderedRef.current === 1) {
-         onCloseMenuCallback(() => { onClickBurger() })
-
-         setOpening(true);
-      }
+   useLayoutEffect(() => {
+      onCloseMenuCallback(() => { onClickBurger() })
    }, [onCloseMenuCallback]);
 
    const onClickBurger = () => { setOpening(false); }
@@ -55,14 +49,16 @@ export const BurgerMenu: FC<BurgerMenuProps> = ({
          <P.MenuBurgerWrapper>
             <animated.div style={{ ...props, overflow: "hidden" }}>
                <P.MenuBurgerInnerWrapper>
-                  {leftSide.map((item) => (
-                     <P.Link to={item.link} key={item.link} onClick={onClickBurger}>
-                        <P.MenuBurgerItem>
-                           <P.Image src={item.image} />
-                           <P.Text>{item.name}</P.Text>
-                        </P.MenuBurgerItem>
-                     </P.Link>
-                  ))}
+                  {leftSide.map(({ link, image, name, hidden }) => hidden
+                     ? null
+                     : (
+                        <P.Link to={link} key={link} onClick={onClickBurger}>
+                           <P.MenuBurgerItem>
+                              <P.Image src={image} />
+                              <P.Text>{name}</P.Text>
+                           </P.MenuBurgerItem>
+                        </P.Link>
+                     ))}
                </P.MenuBurgerInnerWrapper>
             </animated.div>
          </P.MenuBurgerWrapper>

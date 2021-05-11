@@ -5,7 +5,7 @@ import { ResponsiveContext } from '../../Providers/ResponsiveProvider/Responsive
 import { getMenuSelector } from '../../store/menu/selectors';
 import MenuItem from '../MenuItem/MenuItem';
 import * as P from './parts';
-import burger from '../../../assets/menu.svg';
+import burger from '~/assets/menu.svg';
 import { MenuSide } from '../../store/menu/constants';
 import { BurgerMenu } from './BurgerMenu/BurgerMenu';
 
