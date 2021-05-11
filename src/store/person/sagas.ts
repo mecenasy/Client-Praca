@@ -4,18 +4,18 @@ import { getPersonSuccess, getPersonFail } from './actions';
 import { PersonAction, Person, PersonActionType } from './constants';
 
 export function* getPersonWatcher() {
-  yield takeLatest<PersonAction>(PersonActionType.GetPersonRequest, getPersonWorker);
+   yield takeLatest<PersonAction>(PersonActionType.GetPersonRequest, getPersonWorker);
 }
 
 export function* getPersonWorker(action: PersonAction) {
-  const { userId } = action;
-  try {
-    const data: { data: Person } = yield call(getPersonByUserId, userId);
+   const { userId } = action;
+   try {
+      const { data }: { data: Person } = yield call(getPersonByUserId, userId);
 
-    yield put(getPersonSuccess(userId, data.data));
+      yield put(getPersonSuccess(userId, data));
 
-  } catch (error) {
-    yield put(getPersonFail(userId, 'undefined'));
-  }
+   } catch (error) {
+      yield put(getPersonFail(userId, 'undefined'));
+   }
 }
 

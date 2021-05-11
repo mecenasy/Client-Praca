@@ -28,7 +28,7 @@ if (SERVER_BUILD) {
 
 axiosInstance.interceptors.request.use(
    (request) => {
-      const authorizationToken = request.headers.cookie['jwt'];
+      const authorizationToken = request.headers?.cookie?.['jwt'];
 
       if (authorizationToken) {
          request.headers.Authorization = 'Bearer ' + authorizationToken;
