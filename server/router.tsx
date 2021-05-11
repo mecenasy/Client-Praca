@@ -13,13 +13,14 @@ import {
    getModules,
    getManifest,
 } from './helpers';
-import AppProvider from '../src/Providers/AppProvider';
+import AppProvider from '../src/Providers/AppProvider';  
 import { configureStore } from '../src/store/configuration/configureStore';
 import { rootReducerFactory } from '../src/store/configuration/rootReducer';
 import { rootSaga } from '../src/store/configuration/rootSaga';
 import { history } from '../utils/history/history';
 import { ActionProvider } from '../src/Providers/ActionProvider/ActionProvider';
 import { AnyAction } from 'redux';
+import { setCookieProvider } from '~/src/api/api';
 
 const router = express.Router();
 const DEV = process.env.NODE_ENV !== 'production';
@@ -28,7 +29,11 @@ const stats: LoadableManifest = getManifest();
 router.use(async (req: Request, res: Response, next: NextFunction) => {
    if (res.req?.originalUrl.startsWith('/build')) {
       next();
-      return
+      return;
+   }
+
+   if (req.headers.cookie) {
+      setCookieProvider(() => req.headers.cookie)
    }
 
    const context: StaticRouterContext = {}
@@ -58,7 +63,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
             console.log('[server]', action.type)
          }
          store.dispatch(action);
-      })
+      });
    }
 
    store.dispatch(END);
