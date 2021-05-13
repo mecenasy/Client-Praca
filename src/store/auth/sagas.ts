@@ -1,14 +1,12 @@
-import { LOCATION_CHANGE } from 'connected-react-router';
+
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { loginUser, logoutUser, refreshUserToken } from '../../api/auth/requests';
 import * as A from './actions';
 import { AuthAction, AuthActionType, User } from './constants';
 
-
 export function* authWatcher() {
    yield takeLatest(AuthActionType.LoginRequest, loginWorker);
    yield takeLatest(AuthActionType.LogoutRequest, logoutWorker);
-   yield takeLatest(LOCATION_CHANGE, refreshTokenWorker);
 }
 
 export function* loginWorker(action: AuthAction) {
@@ -19,28 +17,34 @@ export function* loginWorker(action: AuthAction) {
 
          yield put(A.loginSuccess(data))
       } catch (error) {
+         const parsedError = error.toJSON();
+         
+         if (parsedError.message.includes('401')) {
+            yield put(A.loginSuccess(undefined, { error: 'Logowanie się nie powiopdło. Sprawdź czy masz poprawny login i hasło.' }));
+            return;
+         }
          yield put(A.loginFail(error));
       }
    }
 }
 
 export function* refreshTokenWorker() {
-      try {
-         const { data }: { data: User } = yield call(refreshUserToken);
+   try {
+      const { data }: { data: User } = yield call(refreshUserToken);
 
-         yield put(A.loginSuccess(data))
-      } catch (error) {
-         yield put(A.loginFail(error));
-      }
+      yield put(A.loginSuccess(data))
+   } catch (error) {
+      yield put(A.loginFail(error));
    }
+}
 
 export function* logoutWorker() {
-      try {
-         const { data }: { data: User } = yield call(logoutUser);
+   try {
+      const { data }: { data: User } = yield call(logoutUser);
 
-         yield put(A.logoutSuccess(data))
-      } catch (error) {
-         yield put(A.logoutFail(error));
-      }
-   
+      yield put(A.logoutSuccess(data))
+   } catch (error) {
+      yield put(A.logoutFail(error));
+   }
+
 }

@@ -4,7 +4,10 @@ export const authReducer = (state: AuthState = initialState, action: AuthAction)
    switch (action.type) {
       case AuthActionType.LoginSuccess:
       case AuthActionType.RefreshTokenSuccess: {
-         return action.user;
+         if (action.user) {
+            return action.user;
+         }
+         return initialState;
       }
       case AuthActionType.LoginFail:
       case AuthActionType.LogoutSuccess:

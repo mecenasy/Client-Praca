@@ -7,9 +7,10 @@ export const loginRequest = (user: string, password: string): AuthAction => ({
    password,
 });
 
-export const loginSuccess = (user: User): AuthAction => ({
+export const loginSuccess = (user: User | undefined, errorMessage?: Record<string, string>): AuthAction => ({
    type: AuthActionType.LoginSuccess,
    user,
+   errorMessage,
 });
 
 export const loginFail = (error: AxiosError): AuthAction => ({
@@ -21,7 +22,7 @@ export const logoutRequest = (): AuthAction => ({
    type: AuthActionType.LogoutRequest,
 });
 
-export const logoutSuccess = (user: User): AuthAction => ({
+export const logoutSuccess = (user: User,): AuthAction => ({
    type: AuthActionType.LogoutSuccess,
    user,
 });

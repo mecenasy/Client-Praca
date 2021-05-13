@@ -32,7 +32,8 @@ export type AuthAction = {
    password: string;
 } | {
    type: AuthActionType.LoginSuccess;
-   user: User;
+   user: User | undefined;
+   errorMessage?: Record<string, string>;
 } | {
    type: AuthActionType.LoginFail;
    error: AxiosError;
@@ -58,4 +59,10 @@ export type AuthState = User;
 
 export const initialState: AuthState = {
    loggedIn: false,
+}
+
+export interface LoginData {
+   user: string;
+   password: string;
+   error?: Record<string, string>
 }
