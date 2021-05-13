@@ -3,6 +3,8 @@ import createSagaMiddleware from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router';
 import { ApplicationState, ConfigureStore } from "./constants";
 import { onError } from './helpers';
+import reduxPromiseListener from './reduxPromiseListener';
+import { setHederProvider } from '~/src/api/api';
 
 const configureStore: ConfigureStore = async (
    initialState,
@@ -14,6 +16,7 @@ const configureStore: ConfigureStore = async (
 
    const middlewares: Middleware[] = [
       sagaMiddleware,
+      reduxPromiseListener.middleware,
    ];
 
    // connected router middleware
@@ -41,6 +44,9 @@ const configureStore: ConfigureStore = async (
       composedMiddlewares,
    );
 
+   if (!SERVER_BUILD) {
+      setHederProvider(() => store.getState().auth.token)
+   }
    const rootSagaTask = rootSaga && sagaMiddleware.run(rootSaga);
 
    return { store, rootSagaTask };
