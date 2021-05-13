@@ -13,10 +13,11 @@ export const actionCreator: ActionCreatorFactory = ({
    isHydrated, isMount, isServer
 }) => [
       Boolean((isHydrated && isMount) || isServer) && getMenuRequest(),
-      Boolean((isHydrated && isMount) || isServer) && getPersonRequest('607d7622a4ee5b505ce39768'),
+      Boolean((isHydrated && isMount) || isServer) && getPersonRequest(),
    ];
 
 export const menuConfig: PageConfig = {
+   extrudeUrl: ['/login'],
    url: '/',
    Component: Menu,
 }

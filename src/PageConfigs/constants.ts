@@ -24,6 +24,7 @@ export type ActionCreatorFactory = (
 ) => Array<Action | boolean>;
 
 export interface PageConfig {
+   extrudeUrl?: string[];
    url: string;
    Component: ComponentType;
    exact?: boolean;
