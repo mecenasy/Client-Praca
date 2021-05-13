@@ -8,6 +8,7 @@ import { rootSaga } from "./store/configuration/rootSaga";
 import { ApplicationState } from "./store/configuration/constants";
 import { preloadReady } from '@react-loadable/revised';
 import { history } from "../utils/history/history";
+import { hydrateInfo } from "./Pages/Hydrate/hydrate";
 
 const renderApplication = async () => {
    const preloadPromise = preloadReady();
@@ -22,6 +23,7 @@ const renderApplication = async () => {
          <App />
       </AppProvider>,
       document.getElementById("app"),
+      hydrateInfo.didHydrate,
    );
 };
 
