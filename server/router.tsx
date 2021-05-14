@@ -13,14 +13,14 @@ import {
    getModules,
    getManifest,
 } from './helpers';
-import AppProvider from '../src/Providers/AppProvider';  
+import AppProvider from '../src/Providers/AppProvider';
 import { configureStore } from '../src/store/configuration/configureStore';
 import { rootReducerFactory } from '../src/store/configuration/rootReducer';
 import { rootSaga } from '../src/store/configuration/rootSaga';
 import { history } from '../utils/history/history';
 import { ActionProvider } from '../src/Providers/ActionProvider/ActionProvider';
 import { AnyAction } from 'redux';
-import { setCookieProvider } from '~/src/api/api';
+import { setHederProvider } from '~/src/api/api';
 
 const router = express.Router();
 const DEV = process.env.NODE_ENV !== 'production';
@@ -33,10 +33,10 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
    }
 
    if (req.headers.cookie) {
-      setCookieProvider(() => req.headers.cookie)
+      setHederProvider(() => req.headers.cookie)
    }
 
-   const context: StaticRouterContext = {}
+   const context: StaticRouterContext = {};
    const modules: string[] = [];
    const sheet = new ServerStyleSheet();
 
@@ -51,6 +51,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
             store={store}
             url={req.url}
             history={history}
+            routerContext={context}
          >
             <App />
          </AppProvider>
@@ -104,6 +105,13 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
       </Capture >
    );
 
+   const { url: redirectUrl, statusCode } = context;
+
+   if (redirectUrl) {
+      res.redirect(statusCode || 301, redirectUrl);
+      return;
+   }
+   
    const body = ReactDomServer.renderToString(sheet.collectStyles(app));
 
    const metaTags = Helmet.renderStatic();

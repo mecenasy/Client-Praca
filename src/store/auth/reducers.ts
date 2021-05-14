@@ -1,23 +1,63 @@
-import { AuthAction, AuthActionType, AuthState, initialState } from "./constants";
+import { combineReducers } from "redux";
+import {
+   AuthAction,
+   AuthActionType,
+   AuthState,
+   authInitialState,
+   userInitialState,
+   Auth,
+   User,
+   LoggedStatus,
+} from "./constants";
 
-export const authReducer = (state: AuthState = initialState, action: AuthAction): AuthState => {
+export const authReducer = (state: Auth = authInitialState, action: AuthAction): Auth => {
    switch (action.type) {
       case AuthActionType.LoginSuccess:
       case AuthActionType.RefreshTokenSuccess: {
-         if (action.user) {
-            return action.user;
+         if (action.auth) {
+            return {
+               ...action.auth,
+               loggedIn: LoggedStatus.LoggedIn,
+            };
          }
-         return initialState;
+         return {
+            ...authInitialState,
+            loggedIn: LoggedStatus.LoggedOut,
+         };
       }
       case AuthActionType.LoginFail:
       case AuthActionType.LogoutSuccess:
       case AuthActionType.LogoutFail: {
          return {
-            loggedIn: false,
-         }
+            ...authInitialState,
+            loggedIn: LoggedStatus.LoggedOut,
+         };
       }
       default: {
          return state;
       }
    }
 }
+
+export const userReducer = (state: User = userInitialState, action: AuthAction): User => {
+   switch (action.type) {
+      case AuthActionType.LoginSuccess: {
+         if (action.user) {
+            return action.user;
+         }
+         return userInitialState;
+      }
+      case AuthActionType.LogoutSuccess:
+      case AuthActionType.LogoutFail: {
+         return userInitialState;
+      }
+      default: {
+         return state;
+      }
+   }
+}
+
+export const authCombinedReducer = combineReducers<AuthState>({
+   auth: authReducer,
+   user: userReducer,
+});

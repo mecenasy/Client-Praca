@@ -5,6 +5,7 @@ const basePath = `${protocol}://${host}${port ? `:${port}` : ''}`;
 
 const authorizationHeaders = {
    'Content-Type': 'application/json',
+   'Access-Control-Allow-Credentials': true,
 };
 
 export { basePath, authorizationHeaders };

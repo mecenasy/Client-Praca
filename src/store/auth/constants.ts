@@ -19,11 +19,15 @@ export enum Role {
 }
 
 export interface User {
-   loggedIn: boolean;
-   name?: string;
-   personId?: string;
+   name: string;
+   personId: string;
    role?: Role;
-   token?: string;
+}
+
+export interface Auth {
+   loggedIn: LoggedStatus;
+   token: string;
+   expiresIn: number;
 }
 
 export type AuthAction = {
@@ -32,7 +36,8 @@ export type AuthAction = {
    password: string;
 } | {
    type: AuthActionType.LoginSuccess;
-   user: User | undefined;
+   user?: User;
+   auth?: Auth;
    errorMessage?: Record<string, string>;
 } | {
    type: AuthActionType.LoginFail;
@@ -41,7 +46,6 @@ export type AuthAction = {
    type: AuthActionType.LogoutRequest;
 } | {
    type: AuthActionType.LogoutSuccess;
-   user: User;
 } | {
    type: AuthActionType.LogoutFail
    error: AxiosError;
@@ -49,20 +53,47 @@ export type AuthAction = {
    type: AuthActionType.RefreshTokenRequest;
 } | {
    type: AuthActionType.RefreshTokenSuccess;
-   user: User;
+   auth: Auth
 } | {
    type: AuthActionType.RefreshTokenFail
    error: AxiosError;
 }
 
-export type AuthState = User;
-
-export const initialState: AuthState = {
-   loggedIn: false,
+export interface AuthState {
+   auth: Auth;
+   user: User;
 }
+
+export enum LoggedStatus {
+   LoggedIn = 'LoggedIn',
+   LoggedOut = 'LoggedOut',
+   Unknown = 'Unknown',
+}
+
+export const userInitialState: User = {
+   name: '',
+   personId: '',
+   role: undefined,
+};
+
+export const authInitialState: Auth = {
+   loggedIn: LoggedStatus.Unknown,
+   expiresIn: 0,
+   token: '',
+};
 
 export interface LoginData {
    user: string;
    password: string;
-   error?: Record<string, string>
+   error?: Record<string, string>;
 }
+
+export interface AuthStorage {
+   token: string;
+   expiresIn: number;
+   personId: string;
+}
+
+export const tokenKey = 'token';
+export const expiresInKey = 'expiresIn';
+export const personIdKey = 'personId';

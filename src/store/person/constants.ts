@@ -41,16 +41,16 @@ export enum PersonActionType {
 }
 
 export type PersonAction = {
-   userId: string;
-} & ({
    type: PersonActionType.GetPersonRequest;
 } | {
+   userId: string;
    type: PersonActionType.GetPersonSuccess;
    person: Person;
 } | {
+   userId: string;
    type: PersonActionType.GetPersonFail;
    message: string,
-});
+};
 
 export const initialState: Person = {
    id: '',

@@ -45,7 +45,7 @@ const configureStore: ConfigureStore = async (
    );
 
    if (!SERVER_BUILD) {
-      setHederProvider(() => store.getState().auth.token)
+      setHederProvider(() => store.getState().auth.auth.token)
    }
    const rootSagaTask = rootSaga && sagaMiddleware.run(rootSaga);
 

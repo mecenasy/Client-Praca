@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { AuthAction, AuthActionType, User } from './constants';
+import { Auth, AuthAction, AuthActionType, User } from './constants';
 
 export const loginRequest = (user: string, password: string): AuthAction => ({
    type: AuthActionType.LoginRequest,
@@ -7,9 +7,10 @@ export const loginRequest = (user: string, password: string): AuthAction => ({
    password,
 });
 
-export const loginSuccess = (user: User | undefined, errorMessage?: Record<string, string>): AuthAction => ({
+export const loginSuccess = (user?: User, auth?: Auth, errorMessage?: Record<string, string>): AuthAction => ({
    type: AuthActionType.LoginSuccess,
    user,
+   auth,
    errorMessage,
 });
 
@@ -22,9 +23,8 @@ export const logoutRequest = (): AuthAction => ({
    type: AuthActionType.LogoutRequest,
 });
 
-export const logoutSuccess = (user: User,): AuthAction => ({
+export const logoutSuccess = (): AuthAction => ({
    type: AuthActionType.LogoutSuccess,
-   user,
 });
 
 export const logoutFail = (error: AxiosError): AuthAction => ({
@@ -36,9 +36,9 @@ export const refreshTokenRequest = (): AuthAction => ({
    type: AuthActionType.RefreshTokenRequest,
 });
 
-export const refreshTokenSuccess = (user: User): AuthAction => ({
+export const refreshTokenSuccess = (auth: Auth): AuthAction => ({
    type: AuthActionType.RefreshTokenSuccess,
-   user,
+   auth,
 });
 
 export const refreshTokenFail = (error: AxiosError): AuthAction => ({

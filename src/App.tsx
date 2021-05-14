@@ -4,6 +4,8 @@ import { menuConfig } from "./PageConfigs/menuConfig";
 import { configs } from './PageConfigs/routesConfigs';
 import { useTransition, animated } from 'react-spring';
 import { AppContainer } from "./modules/Components/Contaners/AppContainer/parts";
+import ExcludePaths from "./Pages/ExtrudePaths/ExtrudePaths";
+import Auth from "./Pages/Auth/Auth";
 
 export const App: FC = () => {
    const location = useLocation();
@@ -20,7 +22,10 @@ export const App: FC = () => {
 
    return (
       <AppContainer>
-         <Route exact={menuConfig.exact} path={menuConfig.url} component={menuConfig.Component} />
+         <ExcludePaths paths={menuConfig.extrudeUrl}         >
+            <Route path={menuConfig.url} component={menuConfig.Component} />
+         </ExcludePaths>
+         <Route path={'/'} component={Auth} />
 
          {transitions.map(({ item: location, props, key }) => (
             <animated.div style={props} key={key}>

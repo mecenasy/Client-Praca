@@ -10,14 +10,14 @@ const Menu = Loadable({
 });
 
 export const actionCreator: ActionCreatorFactory = ({
-   isHydrated, isMount, isServer
+    isMount, 
 }) => [
-      Boolean((isHydrated && isMount) || isServer) && getMenuRequest(),
-      Boolean((isHydrated && isMount) || isServer) && getPersonRequest(),
+      Boolean((isMount) ) && getMenuRequest(),
+      Boolean((isMount) ) && getPersonRequest(),
    ];
 
 export const menuConfig: PageConfig = {
-   extrudeUrl: ['/login'],
+   extrudeUrl: ['/login', '/logout','/change_password'],
    url: '/',
    Component: Menu,
 }

@@ -1,7 +1,6 @@
 import { PersonAction, PersonActionType, Person } from "./constants";
 
-export const getPersonRequest = (userId: string): PersonAction => ({
-  userId,
+export const getPersonRequest = (): PersonAction => ({
   type: PersonActionType.GetPersonRequest,
 });
 

@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { preloadAll } from '@react-loadable/revised';
 import useragent from 'express-useragent';
+import cookieParser from 'cookie-parser';
 import { router } from './router';
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(
    express.static(
       path.resolve(__dirname, '../build/public/')
    ));
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(useragent.express());

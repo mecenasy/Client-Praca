@@ -7,15 +7,15 @@ const axiosInstance = axios.create({
    headers: authorizationHeaders,
 });
 
-let cookieProvider: () => string | undefined;
+let headerProvider: () => string | undefined;
 
 axiosInstance.defaults.withCredentials = true;
 
 if (SERVER_BUILD) {
    axiosInstance.interceptors.request.use(
       (request) => {
-         if (cookieProvider) {
-            const cookies = cookieProvider();
+         if (headerProvider) {
+            const cookies = headerProvider();
 
             if (cookies) {
                request.headers.cookie = cookies;
@@ -28,17 +28,19 @@ if (SERVER_BUILD) {
 
 axiosInstance.interceptors.request.use(
    (request) => {
-      const authorizationToken = request.headers?.cookie?.['jwt'];
+      if (headerProvider) {
+         const authorizationToken = headerProvider();
 
-      if (authorizationToken) {
-         request.headers.Authorization = 'Bearer ' + authorizationToken;
+         if (authorizationToken) {
+            request.headers.Authorization = 'Bearer ' + authorizationToken;
+         }
       }
       return request;
    },
 );
 
-export const setCookieProvider = (provider: () => string | undefined) => {
-   cookieProvider = provider;
+export const setHederProvider = (provider: () => string | undefined) => {
+   headerProvider = provider;
 };
 
 export default axiosInstance;

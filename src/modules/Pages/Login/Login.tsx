@@ -6,15 +6,15 @@ import { useSelector } from 'react-redux';
 import * as P from './parts';
 import { validateLoginForm, hasWrapperError } from './helpers';
 import { Input } from '../../Components/Input/parts';
-import { AuthAction, AuthActionType, LoginData } from '~/src/store/auth/constants';
+import { AuthAction, AuthActionType, LoggedStatus, LoginData } from '~/src/store/auth/constants';
 import { loginRequest } from '~/src/store/auth/actions';
-import { isLoggedInSelector } from '~/src/store/auth/selectors';
+import { loggedInStatusSelector } from '~/src/store/auth/selectors';
 import FormWrapper from '../../Components/FormWrapper/FormWrapper';
 import Alert from '../../Components/Alert/Alert';
 import { AlertType } from '../../Components/Alert/types';
 
 const Login: FC = () => {
-   const isLoggedIn = useSelector(isLoggedInSelector);
+   const isLoggedIn = useSelector(loggedInStatusSelector);
 
    const onSubmit = (action: AuthAction, { password, user }: LoginData) => {
       return loginRequest(user, password);
@@ -25,7 +25,7 @@ const Login: FC = () => {
       }
    };
 
-   if (isLoggedIn) {
+   if (isLoggedIn === LoggedStatus.LoggedIn) {
       return <Redirect to={'/'} />
    }
 
