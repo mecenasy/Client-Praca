@@ -22,6 +22,7 @@ export interface User {
    name: string;
    personId: string;
    role?: Role;
+   isDefaultPassword?: boolean;
 }
 
 export interface Auth {
@@ -73,7 +74,6 @@ export enum LoggedStatus {
 export const userInitialState: User = {
    name: '',
    personId: '',
-   role: undefined,
 };
 
 export const authInitialState: Auth = {

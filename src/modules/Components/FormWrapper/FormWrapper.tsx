@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { AnyAction } from 'redux';
-import { Form, FormProps } from 'react-final-form';
+import { Form, FormProps, FormRenderProps } from 'react-final-form';
 import MakeAsyncFunction from 'react-redux-promise-listener';
 import { promiseListener } from '~/src/store/configuration/reduxPromiseListener';
 import { handleAsyncFormSubmit } from '~/utils/handleSubmitForm';
@@ -19,6 +19,7 @@ interface FormWrapperProps<A, T> extends Omit<FormProps, 'onSubmit'> {
    setPayload?: SetPayload<A, T>;
    getPayload?: GetPayload<A>;
    getError?: GetError<A>;
+   children: (props: Omit<FormRenderProps, 'handleSubmit'>) => React.ReactElement
 }
 
 type FormWrapperType = <Action = AnyAction, FormValues = Record<string, any>>(
@@ -50,9 +51,9 @@ const FormWrapper: FormWrapperType = ({
             {...rest}
             onSubmit={handleAsyncFormSubmit(handleSubmit)}
          >
-            {({ handleSubmit }) => (
+            {({ handleSubmit, ...rest }) => (
                <P.FormWrapper className={className} onSubmit={handleSubmit}>
-                  {children}
+                  {children(rest)}
                </P.FormWrapper>
             )}
          </Form>

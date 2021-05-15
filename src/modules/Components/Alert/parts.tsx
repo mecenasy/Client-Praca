@@ -8,7 +8,6 @@ export const AlertWrapper = styled.div<{ alertType: AlertType }>`
    font-weight: 500;
    color: black;
    width: 100%;
-   margin: 4px;
    
    ${({ alertType }) => {
       switch (alertType) {

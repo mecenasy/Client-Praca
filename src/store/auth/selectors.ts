@@ -9,4 +9,9 @@ export const loggedInStatusSelector = ({ auth }: ApplicationState): LoggedStatus
 export const getPersonId = createSelector<ApplicationState, User, string | undefined>(
    userSelector,
    ({ personId }) => personId,
-)
+);
+
+export const getIsDefaultPassword = createSelector<ApplicationState, User, boolean | undefined>(
+   userSelector,
+   ({ isDefaultPassword }) => isDefaultPassword,
+);

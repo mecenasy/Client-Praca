@@ -1,17 +1,24 @@
 import styled from 'styled-components';
+import { media } from '~/src/styles/media';
 import BoxWithShadowBase from '../../Components/Box/Box';
+import AlertBase from '../../Components/Alert/Alert';
+
+export const Alert = styled(AlertBase)`
+   margin-bottom: 16px;
+`;
 
 export const BoxWithShadow = styled(BoxWithShadowBase)`
-  margin: 200px auto;
-  height: auto;
-  width: 640px;
-  padding: 32px;
+  padding: 16px;
   flex-direction: column;
   align-items: center;
+
+  ${media.greaterThan('xs')`
+      padding: 32px;
+  `}
 `;
 
 export const Title = styled.h1`
-
+   text-align: center;
 `;
 
 export const SubTitle = styled.h4`
@@ -25,6 +32,14 @@ export const SubmitButton = styled.button`
    border: none;
    height: 36px;
    border-radius: 4px;
+   cursor: pointer;
+   box-shadow: 1px 1px 4px 0px #6f8cab;
+   margin-bottom: 8px;
+   border: 1px solid #6f8cab;
+
+   :active {
+      box-shadow: -1px -1px 4px 0px #6f8cab;
+   }
 `;
 
 export const WrapperAlert = styled.div`
@@ -34,7 +49,7 @@ export const WrapperAlert = styled.div`
 `;
 
 export const ValidationAlert = styled.div`
-  height: 40px;
+  height: 24px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -44,5 +59,13 @@ export const ValidationAlert = styled.div`
 export const Error = styled.span`
   color: red;
   text-align: center;
-  font-size: 14px
+  font-size: 14px;
+`;
+
+export const Wrapper = styled.div`
+   height: 100vh;
+   width: 100vw;
+   display: flex;
+   align-items: center;
+   justify-content: center;
 `;
