@@ -1,7 +1,7 @@
 import { FieldRenderProps } from "react-final-form";
 import { LoginData } from "~/src/store/auth/constants";
 
-export const validateLoginForm = (value: any) => {
+export const validateLoginForm = (value: LoginData) => {
   const error: Partial<LoginData> = {};
   
   if (value.user && value.user.length < 8) {

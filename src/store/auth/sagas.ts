@@ -1,7 +1,7 @@
 import { Task } from '@redux-saga/types';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import {  call, cancel, delay, fork, put, race, select, take, takeLatest } from 'redux-saga/effects';
-import { loginUser, logoutUser, refreshUserToken } from '../../api/auth/requests';
+import { loginUser, logoutUser, refreshUserToken , changePasswordUser} from '../../api/auth/requests';
 import * as A from './actions';
 import { AuthAction, AuthActionType, Auth, AuthState, LoggedStatus, AuthStorage } from './constants';
 import { resetTokenInStorage, setTokenInStorage, getTokenInStorage } from './helpers';
@@ -10,6 +10,7 @@ import { loggedInStatusSelector } from './selectors';
 export function* authWatcher() {
    yield takeLatest(AuthActionType.LoginRequest, loginWorker);
    yield takeLatest(AuthActionType.LogoutRequest, logoutWorker);
+   yield takeLatest(AuthActionType.ChangePasswordRequest, changePasswordWorker);
    yield takeLatest(AuthActionType.LogoutSuccess, resetTokenInStorage);
    yield takeLatest(AuthActionType.LogoutSuccess, cancelRefreshWorker);
 
@@ -58,6 +59,19 @@ export function* loginWorker(action: AuthAction) {
             return;
          }
          yield put(A.loginFail(error));
+      }
+   }
+}
+
+export function* changePasswordWorker(action: AuthAction) {
+   if (action.type === AuthActionType.ChangePasswordRequest) {
+      try {
+         yield call(changePasswordUser, action.oldPassword, action.newPassword);
+
+         yield put(A.changePasswordSuccess());
+
+      } catch (error) {
+         yield put(A.changePasswordFail(error));
       }
    }
 }

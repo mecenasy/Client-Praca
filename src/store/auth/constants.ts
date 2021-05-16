@@ -4,6 +4,9 @@ export enum AuthActionType {
    LoginRequest = 'auth/LOGIN_REQUEST',
    LoginSuccess = 'auth/LOGIN_SUCCESS',
    LoginFail = 'auth/LOGIN_FAIL',
+   ChangePasswordRequest = 'auth/CHANG_PASSWORD_REQUEST',
+   ChangePasswordSuccess = 'auth/CHANG_PASSWORD_SUCCESS',
+   ChangePasswordFail = 'auth/CHANG_PASSWORD_FAIL',
    LogoutRequest = 'auth/LOGOUT_REQUEST',
    LogoutSuccess = 'auth/LOGOUT_SUCCESS',
    LogoutFail = 'auth/LOGOUT_FAIL',
@@ -58,6 +61,15 @@ export type AuthAction = {
 } | {
    type: AuthActionType.RefreshTokenFail
    error: AxiosError;
+} | {
+   type: AuthActionType.ChangePasswordRequest;
+   oldPassword: string;
+   newPassword: string;
+} | {
+   type: AuthActionType.ChangePasswordSuccess;
+} | {
+   type: AuthActionType.ChangePasswordFail
+   error: AxiosError;
 }
 
 export interface AuthState {
@@ -86,6 +98,11 @@ export interface LoginData {
    user: string;
    password: string;
    error?: Record<string, string>;
+}
+export interface ChangePasswordData {
+   oldPassword: string;
+   newPassword: string;
+   confirmPassword : string;
 }
 
 export interface AuthStorage {

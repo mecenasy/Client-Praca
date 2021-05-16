@@ -1,37 +1,32 @@
 
-import React, { FC, useRef } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { Field } from 'react-final-form';
 import { Redirect } from 'react-router';
 import { useSelector } from 'react-redux';
 import * as P from './parts';
 import { validateLoginForm, hasWrapperError } from './helpers';
 import { Input } from '../../Components/Input/parts';
-import { AuthAction, AuthActionType, LoggedStatus, LoginData } from '~/src/store/auth/constants';
-import { loginRequest } from '~/src/store/auth/actions';
-import { getIsDefaultPassword, loggedInStatusSelector } from '~/src/store/auth/selectors';
+import { AuthAction, AuthActionType, LoggedStatus, ChangePasswordData } from '~/src/store/auth/constants';
+import { changePasswordRequest } from '~/src/store/auth/actions';
+import { loggedInStatusSelector } from '~/src/store/auth/selectors';
 import FormWrapper from '../../Components/FormWrapper/FormWrapper';
-import { AlertType } from '../../Components/Alert/types';
 import { Helmet } from 'react-helmet';
 import { FormApi } from 'final-form';
 
 const Login: FC = () => {
    const isLoggedIn = useSelector(loggedInStatusSelector);
-   const isDefaultPassword = useSelector(getIsDefaultPassword)
+   const [isPasswordChanged, setChangedPassword] = useState(false);
    const formRef = useRef<FormApi>();
 
-   const onSubmit = (action: AuthAction, { password, user }: LoginData) => {
-      return loginRequest(user, password);
+   const onSubmit = (action: AuthAction, { oldPassword, newPassword }: ChangePasswordData) => {
+      return changePasswordRequest(newPassword, oldPassword);
    };
 
    const getPayload = (action: AuthAction): Record<string, string> | undefined => {
-      if (formRef.current) {
-         formRef.current.batch(() => {
-            if (formRef.current) {
+      setChangedPassword(true)
 
-               formRef.current.change('password', '');
-               formRef.current.change('user', '');
-            }
-         });
+      if (formRef.current) {
+         setTimeout(formRef.current.reset)
       }
 
       if (action.type === AuthActionType.LoginSuccess) {
@@ -39,26 +34,28 @@ const Login: FC = () => {
       }
    };
 
-   if (isLoggedIn === LoggedStatus.LoggedIn) {
-      const redirectPath = isDefaultPassword ? '/change_password' : '/';
+   if (isLoggedIn === LoggedStatus.LoggedOut || isPasswordChanged) {
+      return <Redirect to={'/'} />
+   }
 
-      return <Redirect to={redirectPath} />
+   if (isLoggedIn === LoggedStatus.Unknown) {
+      return null;
    }
 
    return (
       <P.Wrapper>
          <Helmet>
-            <title>Logowanie</title>
-            <meta name="description" content={'Logowanie do systemu zarządzania uczelnianego'} />
+            <title>Zmiana hasła</title>
+            <meta name="description" content={'Zamia hasła użytkownika'} />
          </Helmet>
          <P.BoxWithShadow>
-            <P.Title>Witaj w systemie uczelnianym</P.Title>
-            <P.SubTitle>Aby wejśc do systemy należy podać login i hasło</P.SubTitle>
+            <P.Title>Zmian hasła</P.Title>
+            <P.SubTitle>Aby zmienić hasło wpisz swoje stare hasło oraz nowe i potwierdź je.</P.SubTitle>
 
-            <FormWrapper<AuthAction, LoginData>
-               start={AuthActionType.LoginRequest}
-               resolve={AuthActionType.LoginSuccess}
-               reject={AuthActionType.LoginFail}
+            <FormWrapper<AuthAction, ChangePasswordData>
+               start={AuthActionType.ChangePasswordRequest}
+               resolve={AuthActionType.ChangePasswordSuccess}
+               reject={AuthActionType.ChangePasswordFail}
                setPayload={onSubmit}
                getPayload={getPayload}
                validate={validateLoginForm}
@@ -67,22 +64,13 @@ const Login: FC = () => {
                   formRef.current = form;
                   return (
                      <>
-                        <Field name={'error'} >
-                           {({ meta }) => (
-                              <>
-                                 {hasWrapperError(meta) &&
-                                    <P.Alert message={meta.submitError} type={AlertType.error} />
-                                 }
-                              </>
-                           )}
-                        </Field>
-                        <Field name={'user'} >
+                        <Field name={'oldPassword'} >
                            {({ input, meta }) => (
                               <>
                                  <Input
                                     {...input}
-                                    type={'text'}
-                                    placeholder={'Login'}
+                                    type={'password'}
+                                    placeholder={'Stare hasło'}
                                  />
                                  <P.ValidationAlert>
                                     {hasWrapperError(meta) &&
@@ -92,14 +80,30 @@ const Login: FC = () => {
                               </>
                            )}
                         </Field>
-                        <Field name={'password'} >
+                        <Field name={'newPassword'} >
                            {({ input, meta }) => (
                               <>
                                  <Input
                                     {...input}
                                     type={'password'}
-                                    placeholder={'Hasło'}
+                                    placeholder={'Nowe hasło'}
                                  />
+                                 <P.ValidationAlert>
+                                    {hasWrapperError(meta) &&
+                                       <P.Error>{meta.error}</P.Error>
+                                    }
+                                 </P.ValidationAlert>
+                              </>
+                           )}
+                        </Field>
+                        <Field name={'confirmPassword'} >
+                           {({ input, meta }) => (
+                              <>
+                                 <Input
+                                    {...input}
+                                    type={'password'}
+                                    placeholder={'Podwierdź hasło'} />
+
                                  <P.ValidationAlert>
                                     {hasWrapperError(meta) &&
                                        <P.Error>{meta.error}</P.Error>

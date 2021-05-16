@@ -3,6 +3,7 @@ import { counterConfig } from './counterConfig';
 import { userConfig } from './userConfig';
 import { loginConfig } from './loginConfig';
 import { logoutConfig } from './logoutConfig';
+import { changePasswordConfig } from './changePasswordConfig';
 
 export const configs = [
    homeConfig,
@@ -10,4 +11,5 @@ export const configs = [
    userConfig,
    loginConfig,
    logoutConfig,
+   changePasswordConfig,
 ]

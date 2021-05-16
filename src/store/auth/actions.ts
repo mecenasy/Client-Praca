@@ -45,3 +45,18 @@ export const refreshTokenFail = (error: AxiosError): AuthAction => ({
    type: AuthActionType.RefreshTokenFail,
    error,
 });
+
+export const changePasswordRequest = (newPassword: string, oldPassword: string): AuthAction => ({
+   type: AuthActionType.ChangePasswordRequest,
+   newPassword,
+   oldPassword,
+});
+
+export const changePasswordSuccess = (): AuthAction => ({
+   type: AuthActionType.ChangePasswordSuccess,
+});
+
+export const changePasswordFail = (error: AxiosError): AuthAction => ({
+   type: AuthActionType.ChangePasswordFail,
+   error,
+});
