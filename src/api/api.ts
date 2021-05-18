@@ -26,19 +26,6 @@ if (SERVER_BUILD) {
    );
 }
 
-axiosInstance.interceptors.request.use(
-   (request) => {
-      if (headerProvider) {
-         const authorizationToken = headerProvider();
-
-         if (authorizationToken) {
-            request.headers.Authorization = 'Bearer ' + authorizationToken;
-         }
-      }
-      return request;
-   },
-);
-
 export const setHederProvider = (provider: () => string | undefined) => {
    headerProvider = provider;
 };

@@ -21,13 +21,14 @@ import { history } from '../utils/history/history';
 import { ActionProvider } from '../src/Providers/ActionProvider/ActionProvider';
 import { AnyAction } from 'redux';
 import { setHederProvider } from '~/src/api/api';
+import { logoutSuccess, refreshTokenRequest } from '~/src/store/auth/actions';
 
 const router = express.Router();
 const DEV = process.env.NODE_ENV !== 'production';
 const stats: LoadableManifest = getManifest();
 
 router.use(async (req: Request, res: Response, next: NextFunction) => {
-   if (res.req?.originalUrl.startsWith('/build')) {
+   if (req.originalUrl.startsWith('/build')) {
       next();
       return;
    }
@@ -57,6 +58,18 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
          </AppProvider>
       </ActionProvider >
    );
+
+   if (req.cookies['jwt']) {
+      if (DEV) {
+         console.log('[server]', 'Login')
+      }
+      store.dispatch(refreshTokenRequest());
+   } else {
+      if (DEV) {
+         console.log('[server]', 'Logout')
+      }
+      store.dispatch(logoutSuccess());
+   }
 
    if (actions.length) {
       actions.forEach((action) => {
@@ -111,7 +124,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
       res.redirect(statusCode || 301, redirectUrl);
       return;
    }
-   
+
    const body = ReactDomServer.renderToString(sheet.collectStyles(app));
 
    const metaTags = Helmet.renderStatic();

@@ -1,18 +1,17 @@
 import { Task } from '@redux-saga/types';
 import { LOCATION_CHANGE } from 'connected-react-router';
-import {  call, cancel, delay, fork, put, race, select, take, takeLatest } from 'redux-saga/effects';
-import { loginUser, logoutUser, refreshUserToken , changePasswordUser} from '../../api/auth/requests';
+import { call, cancel, delay, fork, put, race, select, take, takeLatest } from 'redux-saga/effects';
+import { loginUser, logoutUser, refreshUserToken, changePasswordUser } from '../../api/auth/requests';
 import * as A from './actions';
-import { AuthAction, AuthActionType, Auth, AuthState, LoggedStatus, AuthStorage } from './constants';
-import { resetTokenInStorage, setTokenInStorage, getTokenInStorage } from './helpers';
-import { loggedInStatusSelector } from './selectors';
+import { AuthAction, AuthActionType, AuthState, LoggedStatus } from './constants';
+import { loggedInStatusSelector, tokenExpiredInSelector } from './selectors';
 
 export function* authWatcher() {
    yield takeLatest(AuthActionType.LoginRequest, loginWorker);
    yield takeLatest(AuthActionType.LogoutRequest, logoutWorker);
    yield takeLatest(AuthActionType.ChangePasswordRequest, changePasswordWorker);
-   yield takeLatest(AuthActionType.LogoutSuccess, resetTokenInStorage);
    yield takeLatest(AuthActionType.LogoutSuccess, cancelRefreshWorker);
+   yield takeLatest(AuthActionType.RefreshTokenRequest, initialAuth);
 
    if (!SERVER_BUILD) {
       yield fork(initialAuth);
@@ -22,12 +21,18 @@ export function* authWatcher() {
 let refreshTask: Task;
 
 export function* initialAuth() {
-   const { token, expiresIn, personId } = yield call(getTokenInStorage);
+   try {
+      const { data }: { data: AuthState } = yield call(refreshUserToken);
+      const { auth, user } = data
 
-   if (token) {
-      yield put(A.loginSuccess({ personId, name: '', role: undefined }, { expiresIn, token, loggedIn: LoggedStatus.LoggedIn }));
-   } else {
+      if (user) {
+         yield put(A.loginSuccess(user, { ...auth, loggedIn: LoggedStatus.LoggedIn }));
+      } else {
+         yield put(A.logoutSuccess());
+      }
+   } catch (error) {
       yield put(A.logoutSuccess());
+
    }
 }
 
@@ -41,11 +46,6 @@ export function* loginWorker(action: AuthAction) {
    if (action.type === AuthActionType.LoginRequest) {
       try {
          const { data: { auth, user } }: { data: AuthState } = yield call(loginUser, action.user, action.password);
-
-         const token: string = auth.token;
-         const expiresIn: number = auth.expiresIn;
-
-         yield call(setTokenInStorage, token, expiresIn, user.personId);
 
          yield put(A.loginSuccess(user, auth));
 
@@ -80,8 +80,8 @@ export function* refreshTokenWorker() {
    while (true) {
       try {
          const initialTime = +new Date();
-         const { expiresIn, personId }: AuthStorage = yield call(getTokenInStorage);
-         const expiresTime = (expiresIn * 1000) - 5000
+         const expiresIn: number = yield select(tokenExpiredInSelector);
+         const expiresTime = expiresIn - 5000
 
          const { winner } = yield race({
             winner: take(LOCATION_CHANGE),
@@ -95,19 +95,13 @@ export function* refreshTokenWorker() {
             if (toExpiresTime > 60000) {
                yield delay(60000);
             }
-            const { data }: { data: Auth } = yield call(refreshUserToken);
+            const { data }: { data: AuthState } = yield call(refreshUserToken);
 
-            const token: string = data.token;
-            const expiresIn: number = data.expiresIn;
-
-            yield call(setTokenInStorage, token, expiresIn, personId);
-
-            yield put(A.refreshTokenSuccess(data));
+            yield put(A.refreshTokenSuccess(data.auth));
          } else {
             yield put(A.logoutSuccess());
          }
       } catch (error) {
-         yield call(resetTokenInStorage);
          yield put(A.loginFail(error));
       }
    }
@@ -123,18 +117,28 @@ export function* logoutWorker() {
    }
 }
 
-export function* waitForAuthStatus() {
+export function* waitForAuthStatus(): any {
    let authStatus: LoggedStatus = yield select(loggedInStatusSelector);
 
    if (authStatus === LoggedStatus.Unknown) {
-      yield take([
-         AuthActionType.LoginSuccess,
-         AuthActionType.LogoutSuccess,
-         AuthActionType.LoginFail,
-      ]);
-
-      authStatus = yield select(loggedInStatusSelector);
+      if (SERVER_BUILD) {
+         let retry = 10;
+   
+         while (retry) {
+            yield (delay(200));
+            authStatus = yield select(loggedInStatusSelector);
+            if (authStatus !== LoggedStatus.Unknown) {
+               retry--;
+            }
+         }
+      } else {
+         yield take([
+            AuthActionType.LoginSuccess,
+            AuthActionType.LogoutSuccess,
+            AuthActionType.LoginFail,
+         ]);
+      }
    }
 
-   return authStatus;
+   return yield authStatus;
 }
