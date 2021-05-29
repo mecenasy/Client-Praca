@@ -20,7 +20,7 @@ import { rootSaga } from '../src/store/configuration/rootSaga';
 import { history } from '../utils/history/history';
 import { ActionProvider } from '../src/Providers/ActionProvider/ActionProvider';
 import { AnyAction } from 'redux';
-import { setHederProvider } from '~/src/api/api';
+import { setAuthorizationProvider } from '~/src/api/api';
 import { logoutSuccess, refreshTokenRequest } from '~/src/store/auth/actions';
 
 const router = express.Router();
@@ -34,7 +34,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
    }
 
    if (req.headers.cookie) {
-      setHederProvider(() => req.headers.cookie)
+      setAuthorizationProvider(() => req.cookies['jwt'])
    }
 
    const context: StaticRouterContext = {};
@@ -58,7 +58,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
          </AppProvider>
       </ActionProvider >
    );
-
+   
    if (req.cookies['jwt']) {
       if (DEV) {
          console.log('[server]', 'Login')

@@ -7,27 +7,26 @@ const axiosInstance = axios.create({
    headers: authorizationHeaders,
 });
 
-let headerProvider: () => string | undefined;
+let authorizationTokenProvider: () => string | undefined;
 
 axiosInstance.defaults.withCredentials = true;
 
-if (SERVER_BUILD) {
-   axiosInstance.interceptors.request.use(
-      (request) => {
-         if (headerProvider) {
-            const cookies = headerProvider();
+axiosInstance.interceptors.request.use(
+   (request) => {
+      if (authorizationTokenProvider) {
+         const token = authorizationTokenProvider();
 
-            if (cookies) {
-               request.headers.cookie = cookies;
-            }
+         if (token) {
+            request.headers.authorization = 'Bearer ' + token;
          }
-         return request;
-      },
-   );
-}
+      }
+      return request;
+   },
+);
 
-export const setHederProvider = (provider: () => string | undefined) => {
-   headerProvider = provider;
+
+export const setAuthorizationProvider = (provider: () => string | undefined) => {
+   authorizationTokenProvider = provider;
 };
 
 export default axiosInstance;

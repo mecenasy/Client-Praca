@@ -1,6 +1,7 @@
 import { Task } from '@redux-saga/types';
 import { LOCATION_CHANGE } from 'connected-react-router';
-import { call, cancel, delay, fork, put, race, select, take, takeLatest } from 'redux-saga/effects';
+import { call, cancel, delay, fork, put, race, select, take, takeLatest, apply } from 'redux-saga/effects';
+import cookie from 'js-cookie';
 import { loginUser, logoutUser, refreshUserToken, changePasswordUser } from '../../api/auth/requests';
 import * as A from './actions';
 import { AuthAction, AuthActionType, AuthState, LoggedStatus } from './constants';
@@ -23,16 +24,18 @@ let refreshTask: Task;
 export function* initialAuth() {
    try {
       const { data }: { data: AuthState } = yield call(refreshUserToken);
+      console.log("🚀 ~ file: sagas.ts ~ line 27 ~ function*initialAuth ~ data")
       const { auth, user } = data
-
+      
       if (user) {
+         yield apply(cookie, 'set', ['jwt', auth.token, { expires: auth.expiresIn}]);
          yield put(A.loginSuccess(user, { ...auth, loggedIn: LoggedStatus.LoggedIn }));
       } else {
          yield put(A.logoutSuccess());
       }
    } catch (error) {
       yield put(A.logoutSuccess());
-
+      
    }
 }
 
@@ -46,7 +49,8 @@ export function* loginWorker(action: AuthAction) {
    if (action.type === AuthActionType.LoginRequest) {
       try {
          const { data: { auth, user } }: { data: AuthState } = yield call(loginUser, action.user, action.password);
-
+         
+         yield apply(cookie, 'set', ['jwt', auth.token, { expires: auth.expiresIn}]);
          yield put(A.loginSuccess(user, auth));
 
          refreshTask = yield fork(refreshTokenWorker);
@@ -123,7 +127,7 @@ export function* waitForAuthStatus(): any {
    if (authStatus === LoggedStatus.Unknown) {
       if (SERVER_BUILD) {
          let retry = 10;
-   
+
          while (retry) {
             yield (delay(200));
             authStatus = yield select(loggedInStatusSelector);

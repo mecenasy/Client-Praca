@@ -4,7 +4,7 @@ import { routerMiddleware } from 'connected-react-router';
 import { ApplicationState, ConfigureStore } from "./constants";
 import { onError } from './helpers';
 import reduxPromiseListener from './reduxPromiseListener';
-import { setHederProvider } from '~/src/api/api';
+import { setAuthorizationProvider } from '~/src/api/api';
 
 const configureStore: ConfigureStore = async (
    initialState,
@@ -45,7 +45,7 @@ const configureStore: ConfigureStore = async (
    );
 
    if (!SERVER_BUILD) {
-      setHederProvider(() => store.getState().auth.auth.token)
+      setAuthorizationProvider(() => store.getState().auth.auth.token)
    }
    const rootSagaTask = rootSaga && sagaMiddleware.run(rootSaga);
 
