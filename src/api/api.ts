@@ -24,7 +24,6 @@ axiosInstance.interceptors.request.use(
    },
 );
 
-
 export const setAuthorizationProvider = (provider: () => string | undefined) => {
    authorizationTokenProvider = provider;
 };

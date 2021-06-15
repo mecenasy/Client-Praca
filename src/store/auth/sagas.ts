@@ -24,18 +24,17 @@ let refreshTask: Task;
 export function* initialAuth() {
    try {
       const { data }: { data: AuthState } = yield call(refreshUserToken);
-      console.log("🚀 ~ file: sagas.ts ~ line 27 ~ function*initialAuth ~ data")
       const { auth, user } = data
-      
+
       if (user) {
-         yield apply(cookie, 'set', ['jwt', auth.token, { expires: auth.expiresIn}]);
+         yield apply(cookie, 'set', ['jwt', auth.token, { expires: auth.expiresIn }]);
          yield put(A.loginSuccess(user, { ...auth, loggedIn: LoggedStatus.LoggedIn }));
       } else {
          yield put(A.logoutSuccess());
       }
    } catch (error) {
       yield put(A.logoutSuccess());
-      
+
    }
 }
 
@@ -49,8 +48,8 @@ export function* loginWorker(action: AuthAction) {
    if (action.type === AuthActionType.LoginRequest) {
       try {
          const { data: { auth, user } }: { data: AuthState } = yield call(loginUser, action.user, action.password);
-         
-         yield apply(cookie, 'set', ['jwt', auth.token, { expires: auth.expiresIn}]);
+
+         yield apply(cookie, 'set', ['jwt', auth.token, { expires: auth.expiresIn }]);
          yield put(A.loginSuccess(user, auth));
 
          refreshTask = yield fork(refreshTokenWorker);
@@ -114,7 +113,8 @@ export function* refreshTokenWorker() {
 export function* logoutWorker() {
    try {
       yield call(logoutUser);
-
+      yield apply(cookie, 'remove', ['jwt']);
+      
       yield put(A.logoutSuccess())
    } catch (error) {
       yield put(A.logoutFail(error));
