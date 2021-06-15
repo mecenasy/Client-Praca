@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import * as P from './parts';
 import { validateLoginForm, hasWrapperError } from './helpers';
 import { Input } from '../../Components/Input/parts';
-import { AuthAction, AuthActionType, LoggedStatus, LoginData } from '~/src/store/auth/constants';
+import { AuthAction, AuthActionType, LoggedStatus, LoginData, LoginField } from '~/src/store/auth/constants';
 import { loginRequest } from '~/src/store/auth/actions';
 import { getIsDefaultPassword, loggedInStatusSelector } from '~/src/store/auth/selectors';
 import FormWrapper from '../../Components/FormWrapper/FormWrapper';
@@ -67,7 +67,7 @@ const Login: FC = () => {
                   formRef.current = form;
                   return (
                      <>
-                        <Field name={'error'} >
+                        <Field name={LoginField.Error} >
                            {({ meta }) => (
                               <>
                                  {hasWrapperError(meta) &&
@@ -76,7 +76,7 @@ const Login: FC = () => {
                               </>
                            )}
                         </Field>
-                        <Field name={'user'} >
+                        <Field name={LoginField.User} >
                            {({ input, meta }) => (
                               <>
                                  <Input
@@ -92,7 +92,7 @@ const Login: FC = () => {
                               </>
                            )}
                         </Field>
-                        <Field name={'password'} >
+                        <Field name={LoginField.Password} >
                            {({ input, meta }) => (
                               <>
                                  <Input

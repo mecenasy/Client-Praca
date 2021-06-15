@@ -94,15 +94,26 @@ export const authInitialState: Auth = {
    token: '',
 };
 
+export enum LoginField {
+   Error = 'error',
+   User = 'user',
+   Password = 'password',
+}
 export interface LoginData {
-   user: string;
-   password: string;
-   error?: Record<string, string>;
+   [LoginField.User]: string;
+   [LoginField.Password]: string;
+   [LoginField.Error]?: Record<string, string>;
+}
+
+export enum ChangePasswordField {
+   OldPassword = 'oldPassword',
+   NewPassword = 'newPassword',
+   ConfirmPassword = 'confirmPassword',
 }
 export interface ChangePasswordData {
-   oldPassword: string;
-   newPassword: string;
-   confirmPassword : string;
+   [ChangePasswordField.OldPassword]: string;
+   [ChangePasswordField.NewPassword]: string;
+   [ChangePasswordField.ConfirmPassword]: string;
 }
 
 export interface AuthStorage {

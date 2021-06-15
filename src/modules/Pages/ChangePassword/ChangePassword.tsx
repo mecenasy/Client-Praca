@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import * as P from './parts';
 import { validateLoginForm, hasWrapperError } from './helpers';
 import { Input } from '../../Components/Input/parts';
-import { AuthAction, AuthActionType, LoggedStatus, ChangePasswordData } from '~/src/store/auth/constants';
+import { AuthAction, AuthActionType, LoggedStatus, ChangePasswordData, ChangePasswordField } from '~/src/store/auth/constants';
 import { changePasswordRequest } from '~/src/store/auth/actions';
 import { loggedInStatusSelector } from '~/src/store/auth/selectors';
 import FormWrapper from '../../Components/FormWrapper/FormWrapper';
@@ -64,7 +64,7 @@ const Login: FC = () => {
                   formRef.current = form;
                   return (
                      <>
-                        <Field name={'oldPassword'} >
+                        <Field name={ChangePasswordField.OldPassword} >
                            {({ input, meta }) => (
                               <>
                                  <Input
@@ -80,7 +80,7 @@ const Login: FC = () => {
                               </>
                            )}
                         </Field>
-                        <Field name={'newPassword'} >
+                        <Field name={ChangePasswordField.NewPassword} >
                            {({ input, meta }) => (
                               <>
                                  <Input
@@ -96,7 +96,7 @@ const Login: FC = () => {
                               </>
                            )}
                         </Field>
-                        <Field name={'confirmPassword'} >
+                        <Field name={ChangePasswordField.ConfirmPassword} >
                            {({ input, meta }) => (
                               <>
                                  <Input
