@@ -6,6 +6,7 @@ import webpackNodeExternals from "webpack-node-externals";
 import { commonConfig } from './common';
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import ESLintPlugin from "eslint-webpack-plugin";
+import CopyPlugin from 'copy-webpack-plugin';
 
 dotenv.config();
 
@@ -79,6 +80,12 @@ const config = {
       })
    ],
    plugins: [
+      new CopyPlugin({
+         patterns: [{
+            from: path.resolve(__dirname, "../assets/*"),
+            to: path.resolve(__dirname, "../build/public/"),
+         }]
+      }),
       new ForkTsCheckerWebpackPlugin(),
       new ESLintPlugin({
          extensions: ["ts", "tsx"],

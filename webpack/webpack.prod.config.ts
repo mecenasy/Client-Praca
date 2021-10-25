@@ -5,6 +5,7 @@ import ESLintPlugin from "eslint-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { ReactLoadablePlugin } from '@react-loadable/revised/webpack';
 import DotenvWebpack from 'dotenv-webpack';
+import CopyPlugin from 'copy-webpack-plugin';
 import { DefinePlugin } from "webpack";
 import dotenv from 'dotenv';
 import { commonConfig } from './common';
@@ -21,6 +22,12 @@ const config = {
       publicPath: 'build/',
    },
    plugins: [
+      new CopyPlugin({
+         patterns: [{
+            from: path.resolve(__dirname, "../assets/*"),
+            to: path.resolve(__dirname, "../build/public/"),
+         }]
+      }),
       new DotenvWebpack(),
       new ReactLoadablePlugin({
          filename: '../react-loadable.json',

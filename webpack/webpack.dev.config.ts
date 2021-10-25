@@ -5,6 +5,7 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import ESLintWebpackPlugin from "eslint-webpack-plugin";
 import { ReactLoadablePlugin } from '@react-loadable/revised/webpack';
 import DotenvWebpack from 'dotenv-webpack';
+import CopyPlugin from 'copy-webpack-plugin';
 import { DefinePlugin } from "webpack";
 import dotenv from 'dotenv';
 import { commonConfig } from './common';
@@ -19,6 +20,12 @@ const config = {
    },
    entry: path.resolve(__dirname, '../src/index'),
    plugins: [
+      new CopyPlugin({
+         patterns: [{
+            from: path.resolve(__dirname, "../assets/*"),
+            to: path.resolve(__dirname, "../build/public/"),
+         }]
+      }),
       new DotenvWebpack(),
       new ForkTsCheckerWebpackPlugin(),
       new ESLintWebpackPlugin({

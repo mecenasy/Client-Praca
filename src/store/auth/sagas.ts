@@ -6,6 +6,7 @@ import { loginUser, logoutUser, refreshUserToken, changePasswordUser } from '../
 import * as A from './actions';
 import { AuthAction, AuthActionType, AuthState, LoggedStatus } from './constants';
 import { loggedInStatusSelector, tokenExpiredInSelector } from './selectors';
+import axios, { AxiosError } from 'axios';
 
 export function* authWatcher() {
    yield takeLatest(AuthActionType.LoginRequest, loginWorker);
@@ -54,14 +55,16 @@ export function* loginWorker(action: AuthAction) {
 
          refreshTask = yield fork(refreshTokenWorker);
 
-      } catch (error) {
-         const parsedError = error.toJSON();
+      } catch (error: unknown) {
+         if (axios.isAxiosError(error)) {
+            const parsedError: AxiosError<any> = error;
 
-         if (parsedError.message.includes('401')) {
-            yield put(A.loginSuccess(undefined, undefined, { error: 'Logowanie się nie powiopdło. Sprawdź czy masz poprawny login i hasło.' }));
-            return;
+            if (parsedError.message.includes('401')) {
+               yield put(A.loginSuccess(undefined, undefined, { error: 'Logowanie się nie powiopdło. Sprawdź czy masz poprawny login i hasło.' }));
+               return;
+            }
+            yield put(A.loginFail(error));
          }
-         yield put(A.loginFail(error));
       }
    }
 }
@@ -74,7 +77,9 @@ export function* changePasswordWorker(action: AuthAction) {
          yield put(A.changePasswordSuccess());
 
       } catch (error) {
-         yield put(A.changePasswordFail(error));
+         if (axios.isAxiosError(error)) {
+            yield put(A.changePasswordFail(error));
+         }
       }
    }
 }
@@ -105,7 +110,9 @@ export function* refreshTokenWorker() {
             yield put(A.logoutSuccess());
          }
       } catch (error) {
-         yield put(A.loginFail(error));
+         if (axios.isAxiosError(error)) {
+            yield put(A.loginFail(error));
+         }
       }
    }
 }
@@ -114,10 +121,12 @@ export function* logoutWorker() {
    try {
       yield call(logoutUser);
       yield apply(cookie, 'remove', ['jwt']);
-      
+
       yield put(A.logoutSuccess())
    } catch (error) {
-      yield put(A.logoutFail(error));
+      if (axios.isAxiosError(error)) {
+         yield put(A.logoutFail(error));
+      }
    }
 }
 
