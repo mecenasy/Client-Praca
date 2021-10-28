@@ -4,8 +4,8 @@ import { Field } from 'react-final-form';
 import { Redirect } from 'react-router';
 import { useSelector } from 'react-redux';
 import * as P from './parts';
-import { validateLoginForm, hasWrapperError } from './helpers';
-import { Input } from '../../Components/Input/parts';
+import { validateLoginForm } from './helpers';
+import InputFormWrapper from '../../Components/Input/Input';
 import { AuthAction, AuthActionType, LoggedStatus, ChangePasswordData, ChangePasswordField } from '~/src/store/auth/constants';
 import { changePasswordRequest } from '~/src/store/auth/actions';
 import { loggedInStatusSelector } from '~/src/store/auth/selectors';
@@ -64,54 +64,24 @@ const Login: FC = () => {
                   formRef.current = form;
                   return (
                      <>
-                        <Field name={ChangePasswordField.OldPassword} >
-                           {({ input, meta }) => (
-                              <>
-                                 <Input
-                                    {...input}
-                                    type={'password'}
-                                    placeholder={'Stare hasło'}
-                                 />
-                                 <P.ValidationAlert>
-                                    {hasWrapperError(meta) &&
-                                       <P.Error>{meta.error}</P.Error>
-                                    }
-                                 </P.ValidationAlert>
-                              </>
-                           )}
-                        </Field>
-                        <Field name={ChangePasswordField.NewPassword} >
-                           {({ input, meta }) => (
-                              <>
-                                 <Input
-                                    {...input}
-                                    type={'password'}
-                                    placeholder={'Nowe hasło'}
-                                 />
-                                 <P.ValidationAlert>
-                                    {hasWrapperError(meta) &&
-                                       <P.Error>{meta.error}</P.Error>
-                                    }
-                                 </P.ValidationAlert>
-                              </>
-                           )}
-                        </Field>
-                        <Field name={ChangePasswordField.ConfirmPassword} >
-                           {({ input, meta }) => (
-                              <>
-                                 <Input
-                                    {...input}
-                                    type={'password'}
-                                    placeholder={'Podwierdź hasło'} />
-
-                                 <P.ValidationAlert>
-                                    {hasWrapperError(meta) &&
-                                       <P.Error>{meta.error}</P.Error>
-                                    }
-                                 </P.ValidationAlert>
-                              </>
-                           )}
-                        </Field>
+                        <Field
+                           name={ChangePasswordField.OldPassword}
+                           component={InputFormWrapper}
+                           type={'password'}
+                           placeholder={'Stare hasło'}
+                        />
+                        <Field
+                           name={ChangePasswordField.NewPassword}
+                           component={InputFormWrapper}
+                           type={'password'}
+                           placeholder={'Nowe hasło'}
+                        />
+                        <Field
+                           name={ChangePasswordField.ConfirmPassword}
+                           component={InputFormWrapper}
+                           type={'password'}
+                           placeholder={'Podwierdź hasło'}
+                        />
                         <P.SubmitButton type={'submit'}>Zaloguj</P.SubmitButton>
                      </>
                   )

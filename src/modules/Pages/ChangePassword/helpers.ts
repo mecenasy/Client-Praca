@@ -1,5 +1,4 @@
-import { FieldRenderProps } from "react-final-form";
-import { ChangePasswordData, LoginData } from "~/src/store/auth/constants";
+import { ChangePasswordData } from "~/src/store/auth/constants";
 
 export const validateLoginForm = (value: ChangePasswordData) => {
    const error: Partial<ChangePasswordData> = {};
@@ -27,13 +26,3 @@ export const validateLoginForm = (value: ChangePasswordData) => {
 
    return error;
 };
-
-export const hasWrapperError = ({
-   touched,
-   error,
-   dirty,
-   submitFailed,
-   submitError
-}: FieldRenderProps<LoginData>['meta']): boolean => (
-   (touched && error && dirty) || !!(submitFailed && submitError)
-);

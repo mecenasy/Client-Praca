@@ -48,20 +48,6 @@ export const WrapperAlert = styled.div`
   margin: 4px 0 12px;
 `;
 
-export const ValidationAlert = styled.div`
-  height: 24px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 2px;
-`;
-
-export const Error = styled.span`
-  color: red;
-  text-align: center;
-  font-size: 14px;
-`;
-
 export const Wrapper = styled.div`
    height: 100vh;
    width: 100vw;

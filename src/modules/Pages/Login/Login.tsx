@@ -4,8 +4,9 @@ import { Field } from 'react-final-form';
 import { Redirect } from 'react-router';
 import { useSelector } from 'react-redux';
 import * as P from './parts';
-import { validateLoginForm, hasWrapperError } from './helpers';
-import { Input } from '../../Components/Input/parts';
+import { validateLoginForm } from './helpers';
+import InputFormWrapper from '../../Components/Input/Input';
+import { hasWrapperError } from '../../Components/Input/helpers';
 import { AuthAction, AuthActionType, LoggedStatus, LoginData, LoginField } from '~/src/store/auth/constants';
 import { loginRequest } from '~/src/store/auth/actions';
 import { getIsDefaultPassword, loggedInStatusSelector } from '~/src/store/auth/selectors';
@@ -76,38 +77,18 @@ const Login: FC = () => {
                               </>
                            )}
                         </Field>
-                        <Field name={LoginField.User} >
-                           {({ input, meta }) => (
-                              <>
-                                 <Input
-                                    {...input}
-                                    type={'text'}
-                                    placeholder={'Login'}
-                                 />
-                                 <P.ValidationAlert>
-                                    {hasWrapperError(meta) &&
-                                       <P.Error>{meta.error}</P.Error>
-                                    }
-                                 </P.ValidationAlert>
-                              </>
-                           )}
-                        </Field>
-                        <Field name={LoginField.Password} >
-                           {({ input, meta }) => (
-                              <>
-                                 <Input
-                                    {...input}
-                                    type={'password'}
-                                    placeholder={'Hasło'}
-                                 />
-                                 <P.ValidationAlert>
-                                    {hasWrapperError(meta) &&
-                                       <P.Error>{meta.error}</P.Error>
-                                    }
-                                 </P.ValidationAlert>
-                              </>
-                           )}
-                        </Field>
+                        <Field
+                           name={LoginField.User}
+                           component={InputFormWrapper}
+                           type={'text'}
+                           placeholder={'Login'}
+                        />
+                        <Field
+                           name={LoginField.Password}
+                           component={InputFormWrapper}
+                           type={'password'}
+                           placeholder={'Hasło'}
+                        />
                         <P.SubmitButton type={'submit'}>Zaloguj</P.SubmitButton>
                      </>
                   )
