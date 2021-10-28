@@ -3,7 +3,7 @@ import { Route, Switch, useLocation } from "react-router";
 import { menuConfig } from "./PageConfigs/menuConfig";
 import { configs } from './PageConfigs/routesConfigs';
 import { useTransition, animated } from 'react-spring';
-import { AppContainer } from "./modules/Components/Contaners/AppContainer/parts";
+import { AppContainer } from "./modules/Components/Containers/AppContainer/parts";
 import ExcludePaths from "./Pages/ExtrudePaths/ExtrudePaths";
 import Auth from "./Pages/Auth/Auth";
 

@@ -4,6 +4,7 @@ import { userConfig } from './userConfig';
 import { loginConfig } from './loginConfig';
 import { logoutConfig } from './logoutConfig';
 import { changePasswordConfig } from './changePasswordConfig';
+import { panelMenuConfig } from './panelMenuConfig';
 
 export const configs = [
    homeConfig,
@@ -12,4 +13,5 @@ export const configs = [
    loginConfig,
    logoutConfig,
    changePasswordConfig,
+   panelMenuConfig,
 ]

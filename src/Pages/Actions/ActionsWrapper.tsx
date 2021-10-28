@@ -11,7 +11,6 @@ interface ActionsWrapperProps extends RouteComponentProps<any> {
    dispatch: Dispatch<any>;
 }
 
-
 class ActionsWrapper extends React.Component<ActionsWrapperProps> {
    constructor(props: ActionsWrapperProps, context: any) {
       super(props, context);

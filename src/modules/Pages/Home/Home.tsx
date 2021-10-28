@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Helmet } from "react-helmet";
 import * as P from './parts';
-import PageWrapper from "../../Components/Contaners/PageWrapper/PageWrapper";
+import PageWrapper from "../../Components/Containers/PageWrapper/PageWrapper";
 import { useSelector } from "react-redux";
 import { getMenuSelector } from "~/src/store/menu/selectors";
 import MenuItem from "../../MenuItem/MenuItem";

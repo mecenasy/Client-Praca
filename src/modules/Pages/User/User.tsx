@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import PageWrapper from "../../Components/Contaners/PageWrapper/PageWrapper";
+import PageWrapper from "../../Components/Containers/PageWrapper/PageWrapper";
 import * as P from './parts';
 
 export const User: FC = () => {

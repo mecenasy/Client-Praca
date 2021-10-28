@@ -5,7 +5,7 @@ import * as A from '~/src/store/counter/actions';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import * as P from './parts';
-import PageWrapper from '../../Components/Contaners/PageWrapper/PageWrapper';
+import PageWrapper from '../../Components/Containers/PageWrapper/PageWrapper';
 
 const Counter: FC = () => {
    const dispatch = useDispatch();
