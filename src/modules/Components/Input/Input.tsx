@@ -1,25 +1,11 @@
-import React, { FC, ChangeEvent } from 'react';
-import { FieldRenderProps } from 'react-final-form';
+import React, { FC } from 'react';
 import { hasWrapperError } from './helpers';
 import * as P from './parts';
-
-interface InputProps {
-   placeholder: string,
-   onChange: (event: ChangeEvent) => void;
-   type?: string;
-}
+import { InputProps, InputFormWrapperProps, InputType } from './types'
 
 export const Input: FC<InputProps> = (props) => (
    <P.Input {...props} />
 );
-
-export enum InputType {
-   all = 'all',
-   onlyError = 'onlyError',
-   onlyInput = 'input',
-}
-
-type InputFormWrapperProps<T> = FieldRenderProps<T> & { placeholder: string, inputType: InputType }
 
 export const InputFormWrapper = <T extends any>({ input, meta, inputType = InputType.all, ...rest }: InputFormWrapperProps<T>) => (
    <>
