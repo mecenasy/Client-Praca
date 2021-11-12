@@ -15,6 +15,7 @@ export enum AuthActionType {
    RefreshTokenFail = 'auth/REFRESH_TOKEN_FAIL',
 }
 
+// FIXME: move to the user store when will be ready
 export enum Role {
    Student = 'student',
    Teacher = 'teacher',

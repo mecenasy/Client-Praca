@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export const Wrapper = styled.div<{ show: boolean }>`
-   position:static;
+   position: sticky;
    top: 0;
    display: flex;
    justify-content: space-between;
@@ -11,7 +11,6 @@ export const Wrapper = styled.div<{ show: boolean }>`
    opacity: 0;
    transform: translateY(-100%);
    transition: all 300ms ease-in-out;
-   position: relative;
    z-index: 2;
 
    ${({ show }) => show && css`
