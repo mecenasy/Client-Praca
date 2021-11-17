@@ -4,9 +4,7 @@ import ActionsWrapper from "./Actions/ActionsWrapper";
 import { actionCreator } from '../PageConfigs/menuConfig';
 
 const MenuPage: FC = () => (
-   <ActionsWrapper
-      actionCreatorFactory={actionCreator}
-   >
+   <ActionsWrapper actionCreatorFactory={actionCreator}   >
       <Menu />
    </ActionsWrapper>
 );

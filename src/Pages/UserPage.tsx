@@ -4,9 +4,7 @@ import { actionCreator } from '../PageConfigs/userConfig';
 import ActionsWrapper from "./Actions/ActionsWrapper";
 
 const HomePage: FC = () => (
-   <ActionsWrapper
-      actionCreatorFactory={actionCreator}
-   >
+   <ActionsWrapper actionCreatorFactory={actionCreator}   >
       <User />
    </ActionsWrapper>
 );
