@@ -2,16 +2,21 @@ import React, { FC, useCallback, useState } from 'react';
 import * as P from './parts';
 import PageWrapper from "../../Components/Containers/PageWrapper/PageWrapper";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loggedInStatusSelector } from "~/src/store/auth/selectors";
 import { LoggedStatus } from "~/src/store/auth/constants";
-import { getMenuSelector } from '~/src/store/menu/selectors';
+import { getMenuItems } from '~/src/store/panelMenu/menu/selectors';
 import edit from '~/assets/pencil.svg';
 import minus from '~/assets/minus.svg';
 import plus from '~/assets/plus.svg';
 import { MenuSide } from '~/src/store/menu/constants';
 import Loadable from '@react-loadable/revised';
 import PanelMenuForm from '../../Menu/PanelMenuForm/PanelMenuForm';
+import { removeMenuItemsRequest } from '~/src/store/panelMenu/menu/actions';
+import { ApplicationState } from '~/src/store/configuration/constants';
+import { roleSelector } from '~/src/store/panelMenu/role/selectors';
+import { Option } from '../../Components/Input/types';
+import { RoleType } from '~/src/store/panelMenu/role/constants';
 
 const Modal = Loadable({
    loader: async () => import('../../Components/Modal/Modal'),
@@ -20,12 +25,41 @@ const Modal = Loadable({
 
 const PanelMenu: FC = () => {
    const isLoggedIn = useSelector(loggedInStatusSelector);
-   const { leftSide, } = useSelector(getMenuSelector);
+   const menus = useSelector(getMenuItems);
+   const roles = useSelector<ApplicationState, Option<RoleType>[]>(roleSelector)
+   const [id, setId] = useState('');
 
+   // TODO: będzie wybur meny dla konkretnej roleli
+   const [activeRole, setRule] = useState<RoleType>(roles[0]?.value);
+   console.log("🚀 ~ file: PanelMenu.tsx ~ line 34 ~ activeRole", activeRole)
    const [isOpenModal, setOpenModal] = useState(false);
+
+   const dispatch = useDispatch();
+
    const toggleModal = useCallback(() => {
       setOpenModal((prev) => !prev);
+      if (isOpenModal) {
+         // setId('');
+      }
+   }, [isOpenModal]);
+
+   const onSetRole = useCallback((role: RoleType) => () => {
+      setRule(role)
    }, []);
+
+   const onRemoveMenuItem = useCallback((id: string) => () => {
+      dispatch(removeMenuItemsRequest(id))
+   }, []);
+
+   const onEditMenuItem = useCallback((id: string) => () => {
+      setId(id);
+      toggleModal();
+   }, [dispatch, toggleModal]);
+
+   const onAddMenuItem = useCallback(() => {
+      setId('');
+      toggleModal();
+   }, [dispatch, toggleModal]);
 
    return (
       <PageWrapper >
@@ -36,11 +70,18 @@ const PanelMenu: FC = () => {
          {isLoggedIn === LoggedStatus.LoggedIn && (
             <P.MenuPanelWrapper >
                <h1>Konfiguracja Menu</h1>
-               <P.AddItemButton onClick={toggleModal}>
+               <P.SortButtonWrapper>
+                  {roles.map((role, index) => (
+                     <P.SortButton key={index} onClick={onSetRole(role.value)}>
+                        <span>{role.label}</span>
+                     </P.SortButton>
+                  ))}
+               </P.SortButtonWrapper>
+               <P.AddItemButton onClick={onAddMenuItem}>
                   <P.Pen src={plus} />
                   <P.AddItemText>Dodaj nowe menu</P.AddItemText>
                </P.AddItemButton>
-               {leftSide.map((item, index) => (
+               {menus.map((item, index) => (
                   <P.Box key={index}>
                      <P.BoxColumn columWidth={50} >
                         <P.Photo src={item.image || ''} />
@@ -64,10 +105,10 @@ const PanelMenu: FC = () => {
                         </P.BoxInnerColumn>
                      </P.BoxColumn>
                      <P.BoxColumn columWidth={30} direction={'column'}>
-                        <P.Button>
+                        <P.Button onClick={onEditMenuItem(item._id)}>
                            <P.Pen src={edit} />
                         </P.Button>
-                        <P.Button>
+                        <P.Button onClick={onRemoveMenuItem(item._id)}>
                            <P.Pen src={minus} />
                         </P.Button>
                      </P.BoxColumn>
@@ -79,7 +120,7 @@ const PanelMenu: FC = () => {
                      isOpen={isOpenModal}
                      title={'Dodawanie menu'}
                   >
-                     <PanelMenuForm />
+                     <PanelMenuForm initialId={id} onClose={toggleModal} />
                   </Modal>
                )}
             </P.MenuPanelWrapper>

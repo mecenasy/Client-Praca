@@ -1,31 +1,58 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import * as P from './parts';
 import { Field } from 'react-final-form';
-import { MenuItemAction, MenuItemData, MenuItemActionType, MenuItemField } from '~/src/store/panelMenu/constants';
+import createDecorator from 'final-form-calculate';
+import { MenuItemAction, MenuItemData, MenuItemActionType, MenuItemField } from '~/src/store/panelMenu/menu/constants';
 import { SetPayload } from '../../Components/FormWrapper/FormWrapper';
 import InputWithLabel from '../../Components/Input/InputWithLabel';
 import Toggle from '../../Components/Input/Toggle';
 import Dropzone from '../../Components/Input/Dropzone';
 import Dropdown from '../../Components/Input/Dropdown';
+import { getMenuItemById } from '~/src/store/panelMenu/menu/selectors';
+import { useSelector } from 'react-redux';
+import { ApplicationState } from '~/src/store/configuration/constants';
+import { MenuSide } from '~/src/store/menu/constants';
+import { roleSelector } from '~/src/store/panelMenu/role/selectors';
+import { Option } from '../../Components/Input/types';
+import { setMenuItemsRequest } from '~/src/store/panelMenu/menu/actions';
+import { validateMenuItem } from './helpers';
 
-const options = [
-   { value: 'chocolate', label: 'Chocolate' },
-   { value: 'strawberry', label: 'Strawberry' },
-   { value: 'vanilla', label: 'Vanilla' }
-]
 
-const PanelMenuForm: FC = () => {
-   const onSubmit: SetPayload<MenuItemAction, MenuItemData> = (action, value) => {
+interface PanelMenuFormProps {
+   initialId: string;
+   onClose: () => void;
+}
+
+const PanelMenuForm: FC<PanelMenuFormProps> = ({ initialId, onClose }) => {
+   const initialValues = useSelector<ApplicationState, MenuItemData | undefined>((state) => getMenuItemById(state, initialId))
+   const roles = useSelector<ApplicationState, Option<string>[]>(roleSelector)
+   const setPayload: SetPayload<MenuItemAction, MenuItemData> = (action, value) => {
+      return setMenuItemsRequest(value)
+   }
+   const geyPayload: SetPayload<MenuItemAction, MenuItemData> = (action, value) => {
       console.log("🚀 ~ file: PanelMenuForm.tsx ~ line 20 ~ value", value)
+      onClose();
       return action
    }
+
+   const menuSideDecorator = useCallback(createDecorator({
+      field: MenuItemField.SideBoolean,
+      updates: {
+         [MenuItemField.Side]: (value: boolean,) => value ? MenuSide.Right : MenuSide.Left
+      },
+   }), []);
+
    return (
       <div>
          <P.FromWrapper
-            start={MenuItemActionType.MenuItemRequest}
-            resolve={MenuItemActionType.MenuItemSuccess}
-            reject={MenuItemActionType.MenuItemFail}
-            setPayload={onSubmit}
+            start={MenuItemActionType.SetMenuItemsRequest}
+            resolve={MenuItemActionType.SetMenuItemsSuccess}
+            reject={MenuItemActionType.SetMenuItemsFail}
+            setPayload={setPayload}
+            getPayload={geyPayload}
+            initialValues={initialValues}
+            decorators={[menuSideDecorator]}
+            validate={validateMenuItem}
          >
             {() => (
                <>
@@ -62,7 +89,7 @@ const PanelMenuForm: FC = () => {
                         rightText={'nie widoczne'}
                      />
                      <Field
-                        name={MenuItemField.Side}
+                        name={MenuItemField.SideBoolean}
                         component={Toggle}
                         type="checkbox"
                         icons={false}
@@ -83,7 +110,8 @@ const PanelMenuForm: FC = () => {
                      component={Dropdown}
                      placeholder={'wybież dla kogo dostępne jest menu'}
                      label={'Przeznaczenie  menu'}
-                     options={options}
+                     options={roles}
+                     isMulti
                   />
                   <Field
                      name={MenuItemField.Image}

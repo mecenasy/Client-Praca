@@ -7,5 +7,5 @@ export const hasWrapperError = <T>({
    submitFailed,
    submitError
 }: FieldRenderProps<T>['meta']): boolean => (
-   (touched && error && dirty) || !!(submitFailed && submitError)
+   (touched && error && dirty) || !!(submitFailed || submitError)
 );

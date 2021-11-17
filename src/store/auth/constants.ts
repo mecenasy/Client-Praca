@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { RoleType } from '../panelMenu/role/constants';
 
 export enum AuthActionType {
    LoginRequest = 'auth/LOGIN_REQUEST',
@@ -14,18 +15,10 @@ export enum AuthActionType {
    RefreshTokenSuccess = 'auth/REFRESH_TOKEN_SUCCESS',
    RefreshTokenFail = 'auth/REFRESH_TOKEN_FAIL',
 }
-
-// FIXME: move to the user store when will be ready
-export enum Role {
-   Student = 'student',
-   Teacher = 'teacher',
-   Admin = 'admin',
-}
-
 export interface User {
    name: string;
    personId: string;
-   role?: Role;
+   role?: RoleType;
    isDefaultPassword?: boolean;
 }
 

@@ -26,7 +26,7 @@ export type InputFormWrapperProps<T> = FieldRenderProps<T> & {
    label: string;
 };
 
-interface Option<T> {
+export interface Option<T> {
    value: T;
    label: string;
 }

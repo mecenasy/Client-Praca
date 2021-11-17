@@ -5,6 +5,7 @@ import { authCombinedReducer } from "../auth/reducers";
 import { counterReducer } from "../counter/reducers";
 import { menuReducer } from "../menu/reducers";
 import { personReducer } from "../person/reducer";
+import { panelMenuReducer } from "../panelMenu/reducer";
 import { ApplicationState } from "./constants";
 
 export const rootReducerFactory = (history: History) => (
@@ -14,5 +15,6 @@ export const rootReducerFactory = (history: History) => (
       router: connectRouter(history),
       menu: menuReducer,
       person: personReducer,
+      panelMenu: panelMenuReducer,
    })
 );

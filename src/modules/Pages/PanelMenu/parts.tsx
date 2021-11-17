@@ -77,3 +77,20 @@ export const AddItemButton = styled(Button)`
    width: calc(100% - 24px);
 `;
 
+export const SortButtonWrapper = styled.div`
+   display: flex;
+`;
+
+export const SortButton = styled(Button)`
+   box-shadow: 0 0 6px 0 #74aae0;
+   position: relative;
+   height: 100%;
+   border: 1px solid gray;
+   border-radius: 6px;
+   background: white;
+   padding: 6px;
+   position:relative;
+   margin: 12px 12px 0;
+   width: calc(100% - 24px);
+`;
+

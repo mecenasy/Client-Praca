@@ -3,6 +3,8 @@ import { authWatcher } from "../auth/sagas";
 import { counterWatcher } from "../counter/sagas";
 import { getMenuWatcher } from "../menu/sagas";
 import { getPersonWatcher } from "../person/sagas";
+import { getRoleWatcher } from "../panelMenu/role/sagas";
+import { menuItemsWatcher } from "../panelMenu/menu/sagas";
 
 export function* rootSaga() {
    yield all([
@@ -10,5 +12,7 @@ export function* rootSaga() {
       fork(counterWatcher),
       fork(getMenuWatcher),
       fork(getPersonWatcher),
+      fork(getRoleWatcher),
+      fork(menuItemsWatcher),
    ]);
 }

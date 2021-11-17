@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import * as P from './parts';
 import { validateLoginForm } from './helpers';
 import InputFormWrapper from '../../Components/Input/Input';
-import { hasWrapperError } from '../../Components/Input/helpers';
 import { AuthAction, AuthActionType, LoggedStatus, LoginData, LoginField } from '~/src/store/auth/constants';
 import { loginRequest } from '~/src/store/auth/actions';
 import { getIsDefaultPassword, loggedInStatusSelector } from '~/src/store/auth/selectors';
@@ -71,7 +70,7 @@ const Login: FC = () => {
                         <Field name={LoginField.Error} >
                            {({ meta }) => (
                               <>
-                                 {hasWrapperError(meta) &&
+                                 {meta.submitError &&
                                     <P.Alert message={meta.submitError} type={AlertType.error} />
                                  }
                               </>

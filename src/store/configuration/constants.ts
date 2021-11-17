@@ -6,6 +6,7 @@ import { AuthState } from "../auth/constants";
 import { CounterState } from "../counter/constants";
 import { MenuState } from "../menu/constants";
 import { Person } from "../person/constants";
+import { MenuPanelState } from "../panelMenu/constants";
 
 export interface ApplicationState {
    auth: AuthState;
@@ -13,6 +14,7 @@ export interface ApplicationState {
    person: Person;
    router: RouterState;
    menu: MenuState;
+   panelMenu: MenuPanelState;
 }
 
 export type ConfigureStore = (

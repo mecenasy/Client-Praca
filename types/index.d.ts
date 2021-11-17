@@ -43,3 +43,5 @@ declare module 'react-redux-promise-listener' {
    const MakeAsyncFunction: any;
    export = MakeAsyncFunction;
 }
+
+declare type OmitStrict<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
