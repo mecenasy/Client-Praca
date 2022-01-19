@@ -1,4 +1,4 @@
-const protocol = API_HOST_PROTOCOL || 'http';
+const protocol = API_HOST_PROTOCOL || 'https';
 const host = API_HOST_URL || 'localhost';
 const port = +API_HOST_PORT;
 const basePath = `${protocol}://${host}${port ? `:${port}` : ''}`;
